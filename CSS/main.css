@@ -1737,7 +1737,7 @@ button {
 footer {
   width: 100%;
     bottom: 0;
-    position: fixed;
+    position: relative;
     background: #2d2d2d;
 }
 footer .contact-list li {
