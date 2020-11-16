@@ -6,7 +6,11 @@ body {
   font-weight: 400;
   font-size: 14px;
   line-height: 24px;
+  position:relative;
   overflow-x: hidden;
+
+
+  margin: 0 auto;
 }
 img {
   max-width: 100%;
@@ -1737,11 +1741,12 @@ button {
 footer {
   width: 100%;
     bottom: 0;
-    position: relative;
+    position:absolute;
     background: #2d2d2d;
+
 }
 footer .contact-list li {
-  margin-bottom: 12px;
+  margin-bottom: 13px;
   color: #999999;
 }
 footer .contact-list li i {
@@ -3644,7 +3649,8 @@ blockquote .quote-text {
   line-height: 32px;
 }
 .main-desc {
-  margin-bottom: 30px;
+  margin-bottom: 50px;
+
 }
 .main-desc p {
   font-size: 26px;

@@ -16,7 +16,9 @@
     <body>
     
         <?php include "index.php"; ?>
-	<main>
+	
+  
+    <main>
 	    <div class="container">
 
 	      <!--Section: Block Content-->
@@ -240,8 +242,6 @@
 
 	    </div>
   </main>
-  <!--Main layout-->
-<?php include "footer.php"; ?>
     
     </body>
 
