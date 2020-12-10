@@ -6,7 +6,9 @@
     <title>Web Market Place</title>
     
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="CSS/bootstrap.min.css" type="text/css">      
+    <link rel="stylesheet" href="CSS/bootstrap.min.css" type="text/css"> 
+    <link rel="stylesheet" href="CSS/bootstrap.css" type="text/css">      
+     
     <!-- Main Styles -->
     <link rel="stylesheet" href="CSS/main.css" type="text/css">
     <!-- Responsive CSS Styles -->
