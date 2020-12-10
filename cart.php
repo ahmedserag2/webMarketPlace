@@ -25,7 +25,7 @@
 <section>
   
 
-
+<?php include "menu.html" ?>
  <!--Grid row-->
   <div class="row">
 
