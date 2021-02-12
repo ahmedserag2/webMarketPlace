@@ -193,32 +193,53 @@ input[type=text]:placeholder {
         if(isset($_POST["submit"])) { 
              
              
+            $servername = "localhost";
+            $username = "root";
+            $passwordDB = "";
+            $dbname = "mydb";
+
+            // Create connection
+            $conn = new mysqli($servername, $username, $passwordDB, $dbname);
+
             $firstname = $_POST['fname'];
             $lastname = $_POST['lname'];
             $email = $_POST['email'];
-            $password = $_POST['password'];
+            $password = $_POST['Password'];
             $phonenumber = $_POST['phone'];
             $gender = $_POST['gender'];
             $DOB=$_POST["date"];
             
-            
-            
-            
-            include_once("DBHelper.php");
-            $db=new DBHelper();
-            $sql="INSERT INTO user(status,Firstname,Lastname,Email,Password,DOB,phoneNum, Gender) VALUES ('pending','$firstname','$lastname','$email',' $password','$phonenumber','$gender','$DOB')";;
-            //var_dump($sql);
-          $result = mysqli_query($conn,$sql);
-            if($result)	
-		    {
-			 echo "<script>
-              alert('Submitted successfully');
-               window.location.href='signin.php';
-              </script>";  
-		    }
-		   
-            return $result;
-        } 
+            $sqlInsert = "INSERT INTO 
+            `user`(`firstName`, `lastName`, `password`, `Role`,`phoneNumber`,`gender`,`Email`,`date_of_birth`)
+             VALUES ('$firstname', '$lastname','$password',1,'$phonenumber','$gender','$email','$DOB')";
+            $sqlmail = "SELECT Id FROM user WHERE Email = '$email'";
+            $mailExists = mysqli_query($conn,$sqlmail);
+
+            echo mysqli_num_rows($conn->query($sqlmail));
+
+          
+          //if email not found 
+              if(mysqli_num_rows($conn->query($sqlmail)) == 0)
+              {
+                $result = mysqli_query($conn,$sqlInsert);
+                  if($result)	
+          		    {
+          			     echo "<script>
+                        alert('Submitted successfully');
+                         window.location.href='signin.php';
+                        </script>";  
+                       
+          		    }
+                  else{
+                    echo $conn->error;
+                  }
+  		        }
+              else
+              {
+                echo "<script>alert('email already taken please try again')</script>";
+              }
+                //return $result;
+            } 
    // }
 
 
@@ -226,7 +247,7 @@ input[type=text]:placeholder {
     
     
 <div class="container">
-            <form class="form-horizontal" method="post" action="signin.php" role="form">
+            <form class="form-horizontal" method="post" action="" role="form">
                 <img src="img/logo.png" class="img"><h3 style="font-weight: bold;  padding-bottom: 25;
     padding-left: 60;
 align-content: center; margin-left:150;">Sign up</h3>
