@@ -1,6 +1,6 @@
 <html>
 <head>
-
+ 
 <link rel="stylesheet" href="CSS/style.css" type="text/css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
@@ -8,289 +8,190 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 
+    
+    </head>
+    
+<?php
+    session_start();
+     
+   //include_once("connection.php");
+     $conn = mysqli_connect("localhost","root","","mydb");
 
-<!------ Include the above in your HEAD tag ---------->
-    <style>
+     if(!$conn)
+     {
+     die("Connection failed: ".mysqli_connect_error());
+     }
+     if(isset($_SESSION["Adminloggedin"]))
+     {
+    header("Location:Admin.html");
+     }
+     if(isset($_SESSION["Custmorlogin"]))
+     {
+    header("Location:Custmor.html");
+     }
+     if(isset($_SESSION["Odeterlogin"]))
+     {
+    header("Location:odeter.html");
+     }
+     if(isset($_SESSION["HRlogin"]))
+     {
+    header("Location:HR.html");
+     }
+    $Error="";
+     
+
+    
+     /* bos ya negm aly hy edit yrag3 3la al navigation bta3t aly
+      fo2 3shan ana 3amelha 3la files 3ndi ana wa htdrb 3nd omk wa shokrn */
     
     
     
-/* BASIC */
+    if(isset($_POST["Submit"]))
+    {
+        $username = $_POST['username'];
+        $password = $_POST['upassword'];
+        $_SESSION['username']=$username;
+        $_SESSION['Password']=$password;
+        
+        if(isset($_POST["remember"]))
+        {  
+         include_once("cookies.php");
+        }
+       
 
-html {
-  background-color: #56baed;
- 
-}
+//        $sql="SELECT * FROM users WHERE Email = '$username' AND Password ='$password'";
+  //      $sql2="SELECT TypeID FROM users WHERE Email ='$username'";
+    //    $sql3="SELECT status FROM users WHERE Email ='$username'";
+        $sql = "SELECT * FROM user WHERE Email = '$username' AND password = '$password'";
+	  //  $result = mysqli_query($conn,$sql);
+      //  $result2 = mysqli_query($conn,$sql2);
+        $result = mysqli_query($conn,$sql);
+            
+        /* user typee wa pending state */
 
-body {
-  font-family: "Poppins", sans-serif;
-  background: url('img/main_banner.jpg') fixed;
-  background-size: cover;
+        if($row = mysqli_fetch_array($result))
+        {
+            $_SESSION["user"]=$row;
+            $_SESSION['loggedIn'] = true;
 
-}
+            header("Location:home.php");
+        }
+        else
+        {
+        	$Error = "Email or password incorrect";
+        }
 
-
-
-
-/* STRUCTURE */
-
-.wrapper {
-  display: flex;
-  align-items: center;
-  flex-direction: column; 
-  justify-content: center;
-  width: 100%;
-  min-height: 100%;
-  padding: 20px;
-}
-
-#formContent {
-  -webkit-border-radius: 10px 10px 10px 10px;
-  border-radius: 10px 10px 10px 10px;
-  background: #fff;
-  width: 90%;
-  max-width: 450px;
-  position: relative;
-  padding: 0px;
-  -webkit-box-shadow: 0 30px 60px 0 rgba(0,0,0,0.3);
-  box-shadow: 0 30px 60px 0 rgba(0,0,0,0.3);
-  text-align: center;
-}
-
-#formFooter {
-  background-color: #f6f6f6;
-  border-top: 1px solid #dce8f1;
-  padding: 25px;
-  text-align: center;
-  -webkit-border-radius: 0 0 10px 10px;
-  border-radius: 0 0 10px 10px;
-}
-
-
-
-/* TABS */
-
-h2.inactive {
-  color: #cccccc;
-}
-
-h2.active {
-  color: #0d0d0d;
-  border-bottom: 2px solid #5fbae9;
-}
-
-
-/* FORM TYPOGRAPHY*/
-
-input[type=button], input[type=submit], input[type=reset]  {
-  background-color: #56baed;   
-  border: none;
-  color: white;
-  padding: 15px 80px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  text-transform: uppercase;
-  font-size: 13px;
-  -webkit-box-shadow: 0 10px 30px 0 rgba(95,186,233,0.4);
-  box-shadow: 0 10px 30px 0 rgba(95,186,233,0.4);
-  -webkit-border-radius: 5px 5px 5px 5px;
-  border-radius: 5px 5px 5px 5px;
-  margin: 5px 20px 40px 20px;
-  -webkit-transition: all 0.3s ease-in-out;
-  -moz-transition: all 0.3s ease-in-out;
-  -ms-transition: all 0.3s ease-in-out;
-  -o-transition: all 0.3s ease-in-out;
-  transition: all 0.3s ease-in-out;
-}
-
-input[type=button]:hover, input[type=submit]:hover, input[type=reset]:hover  {
-  background-color: #39ace7;
-}
-
-input[type=button]:active, input[type=submit]:active, input[type=reset]:active  {
-  -moz-transform: scale(0.95);
-  -webkit-transform: scale(0.95);
-  -o-transform: scale(0.95);
-  -ms-transform: scale(0.95);
-  transform: scale(0.95);
-}
-
-input[type=text] {
-  background-color: #f6f6f6;
-  border: none;
-  color: #0d0d0d;
-  padding: 15px 32px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 16px;
-  margin: 5px;
-  width: 85%;
-  border: 2px solid #f6f6f6;
-  -webkit-transition: all 0.5s ease-in-out;
-  -moz-transition: all 0.5s ease-in-out;
-  -ms-transition: all 0.5s ease-in-out;
-  -o-transition: all 0.5s ease-in-out;
-  transition: all 0.5s ease-in-out;
-  -webkit-border-radius: 5px 5px 5px 5px;
-  border-radius: 5px 5px 5px 5px;
-}
-
-input[type=text]:focus {
-  background-color: #fff;
-  border-bottom: 2px solid #5fbae9;
-}
-
-input[type=text]:placeholder {
-  color: #cccccc;
-}
-
-
-
-/* ANIMATIONS */
-
-/* Simple CSS3 Fade-in-down Animation */
-.fadeInDown {
-  -webkit-animation-name: fadeInDown;
-  animation-name: fadeInDown;
-  -webkit-animation-duration: 1s;
-  animation-duration: 1s;
-  -webkit-animation-fill-mode: both;
-  animation-fill-mode: both;
-}
-
-@-webkit-keyframes fadeInDown {
-  0% {
-    opacity: 0;
-    -webkit-transform: translate3d(0, -100%, 0);
-    transform: translate3d(0, -100%, 0);
-  }
-  100% {
-    opacity: 1;
-    -webkit-transform: none;
-    transform: none;
-  }
-}
-
-@keyframes fadeInDown {
-  0% {
-    opacity: 0;
-    -webkit-transform: translate3d(0, -100%, 0);
-    transform: translate3d(0, -100%, 0);
-  }
-  100% {
-    opacity: 1;
-    -webkit-transform: none;
-    transform: none;
-  }
-}
-
-/* Simple CSS3 Fade-in Animation */
-@-webkit-keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
-@-moz-keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
-@keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
-
-.fadeIn {
-  opacity:0;
-  -webkit-animation:fadeIn ease-in 1;
-  -moz-animation:fadeIn ease-in 1;
-  animation:fadeIn ease-in 1;
-
-  -webkit-animation-fill-mode:forwards;
-  -moz-animation-fill-mode:forwards;
-  animation-fill-mode:forwards;
-
-  -webkit-animation-duration:1s;
-  -moz-animation-duration:1s;
-  animation-duration:1s;
-}
-
-.fadeIn.first {
-  -webkit-animation-delay: 0.4s;
-  -moz-animation-delay: 0.4s;
-  animation-delay: 0.4s;
-}
-
-.fadeIn.second {
-  -webkit-animation-delay: 0.6s;
-  -moz-animation-delay: 0.6s;
-  animation-delay: 0.6s;
-}
-
-.fadeIn.third {
-  -webkit-animation-delay: 0.8s;
-  -moz-animation-delay: 0.8s;
-  animation-delay: 0.8s;
-}
-
-.fadeIn.fourth {
-  -webkit-animation-delay: 1s;
-  -moz-animation-delay: 1s;
-  animation-delay: 1s;
-}
-
-/* Simple CSS3 Fade-in Animation */
-.underlineHover:after {
-  display: block;
-  left: 0;
-  bottom: -10px;
-  width: 0;
-  height: 2px;
-  background-color: #56baed;
-  content: "";
-  transition: width 0.2s;
-}
-
-.underlineHover:hover {
-  color: #0d0d0d;
-}
-
-.underlineHover:hover:after{
-  width: 100%;
-}
-
-
-
-/* OTHERS */
-
-*:focus {
-    outline: none;
-} 
-
-#icon {
-  width:60%;
-}
-
+        $conn->close();
+       /* if($row2=mysqli_fetch_array($result2))            
+        {
+              $_SESSION["usertype"]=$row2[0];
+        }
+        
+        if($row=mysqli_fetch_array($result))	
+	    {
+            if($_SESSION["userstatus"]=="pending")
+            {
+                $Error= "You are not approved yet";       
+            }
+            else if($_SESSION["userstatus"]=="Declined")
+            {
+                
+                $Error= "sorry you have been declined, please contact us for further information";
+            }
+            else 
+            {
+                
+                 $_SESSION["ID"]=$row[7];
+                  $_SESSION["Fname"]=$row[0];
+                  $_SESSION["Lname"]=$row[1];
+                  $_SESSION["Umail"]=$row[2];
+                  
+              
+               
+                if($_SESSION["usertype"] == 0)
+                { 
+                  $_SESSION['Adminloggedin'] = true;
+                  header("Location:Admin.html");
+                    
+                }
+                else if($_SESSION["usertype"] == 1)
+                {
+                   
+                    $_SESSION["HRlogin"]=true;
+                    header("Location:HR.html");
+                }
+                else if($_SESSION["usertype"] == 2)
+                {
+                    $_SESSION["Odeterlogin"]=true;
+                    header("Location:odeter.html");
+                } 
+                else if($_SESSION["usertype"] == 2)
+                {
+                    $_SESSION["Cutmorlogin"]=true;
+                    header("Location:Custmor.html");
+                } 
+            }  
+	    }
+	    else	
+	    {
+		 $Error= "Invalid username or Password";
+        }
+     
+     */   
+    }
+    if(!isset($_COOKIE['Username']))
+    {
+        $_COOKIE['Username']=" ";
+        
+    }
+   if(!isset($_COOKIE['Password']))
+    {
+        $_COOKIE['Password']=" ";
+        
+    }
     
-    </style>
     
-</head>
+    ?>
     
-    <body>
+    <!-- jaison class front -->
+    <script src="js/wow.min.js"></script>
+    <script>
+              new WOW().init();
+        
+    </script>
+    
+<body>
+<?php
 
-  
-<div class="wrapper fadeInDown">
-  <div id="formContent">
-    <!-- Tabs Titles -->
+include"menu.php";?>
 
-    <!-- Icon -->
-    <div class="fadeIn first">
-      <img src="img/logo.png" id="icon" alt="User Icon" />
-    </div>
-
-    <!-- Login Form -->
-    <form>
-      <input type="text" id="login" class="fadeIn second" name="login" placeholder="login">
-      <input type="text" id="password" class="fadeIn third" name="login" placeholder="password">
-      <input type="submit" class="fadeIn fourth" value="Log In">
-    </form>
-
-    <!-- Remind Passowrd -->
-    <div id="formFooter">
-      <a class="underlineHover" href="#">Forgot Password?</a>
-    </div>
-
+<form action="" method="post">
+  <div class="imgcontainer wow fadeIn">
+    
+      <div class="line"></div>
   </div>
-</div>
-        </body>
-    </html>
+  <div class="container">
+      <h2 class="title wow flipInX" data-wow-delay="0.5s">Sign In</h2>
+      <?php echo "<h4 style='color: red'>".$Error."</h4>"; ?>
+    <label for="uname"><b>Email</b></label><br>
+    <input type="text" class="form-control" placeholder="Enter Username" value="<?php echo $_COOKIE['Username'] ?>" id="uname" name="username" required><br>
+
+    <label for="psw"><b>Password</b></label><br>
+    <input type="password" class="form-control" placeholder="Enter Password" value="<?php echo $_COOKIE['Password'] ?>" id="pass" name="upassword" required><br><br>
+        
+    <button class="btn mybtn" name="Submit" type="submit">Login</button><br>
+    <label>
+      <input type="checkbox" checked="checked" class="form-check-label" name="remember"> Remember me
+    </label>
+      
+  </div>
+
+</form>
+    <script>
+      document.getElementById("uname").focus();
+        
+    </script>
+    
+
+</body>
+</html>

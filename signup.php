@@ -187,7 +187,8 @@ input[type=text]:placeholder {
 <?php
     
         
-    
+    //session_start();
+    include "menu.php";
     
      
         if(isset($_POST["submit"])) { 
