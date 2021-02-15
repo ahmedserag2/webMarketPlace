@@ -78,7 +78,8 @@
 			$servername = "localhost";
 			$username = "root";
 			$password = "";
-			$dbname = "myDB";
+			$dbname = "mydb";
+
 
 			
 			// Create connection

@@ -104,7 +104,8 @@
    $serverName = "localHost";
     $userName = "root";
     $password = "";
-    $DB = "myDB";
+    $DB = "mydb";
+
 
     $productId = $_SESSION["allRecords"][$productIndex]["Id"];
     $conn = mysqli_connect($serverName, $userName, $password, $DB);
