@@ -1,4 +1,5 @@
 <?php
-include "menu.html";
+session_start();
+include "menu.php";
 
 ?>
