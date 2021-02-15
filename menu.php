@@ -1,3 +1,4 @@
+<?php //header("Location: home.php"); ?>
 <html>
 <head>
   
@@ -40,18 +41,18 @@
            // echo '<a class="navbar-brand" href="home.php">Welcome '.$_SESSION["user"]["firstName"].'</a>';
             if ($_SESSION["user"]["Role"] == 1) {
               echo '<li class="nav-item active">
-              <a class="nav-link" href="#profile.php"><i class="fa fa-home"></i> My Profile <span class="sr-only">(current)</span></a>
+              <a class="nav-link" href="#profile.php"><i class="fa fa-user"></i> My Profile <span class="sr-only">(current)</span></a>
               </li>';
 
             } else if ($_SESSION["user"]["Role"] == 2){
                echo '<li class="nav-item active">
-              <a class="nav-link" href="Admin_products.php"><i class="fa fa-home"></i> Admin <span class="sr-only">(current)</span></a>
+              <a class="nav-link" href="Admin_products.php"><i class="fa fa-user"></i> Admin <span class="sr-only">(current)</span></a>
               </li>';
 
             }
 
              echo ' <li class="nav-item active">
-                <a class="nav-link" href="signout.php"><i class="fa fa-home"></i> SignOut <span class="sr-only">(current)</span></a>
+                <a class="nav-link" href="signout.php"><i class="fa fa-sign-out"></i> SignOut <span class="sr-only">(current)</span></a>
               </li>';
 
               //make condition for hr,admin andd auditor mostly a menu will be added
@@ -60,11 +61,11 @@
           else
           {
             echo '<li class="nav-item active">
-              <a class="nav-link" href="signin.php"><i class="fa fa-home"></i> Signin <span class="sr-only">(current)</span></a>
+              <a class="nav-link" href="signin.php"><i class="fa fa-sign-in"></i> Signin <span class="sr-only">(current)</span></a>
               </li>';
 
              echo ' <li class="nav-item active">
-                <a class="nav-link" href="signup.php"><i class="fa fa-home"></i> Signup <span class="sr-only">(current)</span></a>
+                <a class="nav-link" href="signup.php"><i class="fa fa-user-plus"></i> Signup <span class="sr-only">(current)</span></a>
               </li>';
           }
       ?>
@@ -72,12 +73,13 @@
 
       
       <li class="nav-item active">
-              <a class="nav-link" href="SearchedFor.php?ProductName="><i class="fa fa-home"></i> All Products <span class="sr-only">(current)</span></a>
+              <a class="nav-link" href="SearchedFor.php?ProductName="><i class="fa fa-shopping-basket"></i> All Products <span class="sr-only">(current)</span></a>
               </li>
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           <i class="fa fa-shopping-basket"></i> Products
         </a>
+
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
           <a class="dropdown-item" href="#">cat1</a>
           <a class="dropdown-item" href="#">cat2</a>
@@ -87,11 +89,17 @@
       </li>
 
       
+
+    
     
       
       <li class="nav-item active">
         <a class="nav-link" href="contactus.php"><i class="fa fa-info-circle"></i> Contact us</a>
       </li>
+
+        <li class="nav-item active">
+              <a class="nav-link" href="cart.php"><i class="fa fa-shopping-cart"></i>Cart<span class="sr-only">(current)</span></a>
+              </li>
     </ul>
 
     <form class="form-inline my-2 my-lg-0" action = "SearchedFor.php" method = "get">

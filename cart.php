@@ -1,27 +1,5 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<title>in webmarketplace</title>
-
-
-
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-
-
-  <link rel="stylesheet" href="CSS/cart.css" type="text/css">      
-
-    
-
-   
-</head>
-<body>
-<section>
-  
-
-<?php 
-  session_start();
+<?php
+session_start();
   include 'menu.php';
 
   $totalPrice = 0;
@@ -66,6 +44,7 @@
                   unset($_SESSION['cartItems']);
                   unset($_SESSION['inSession']);
                   header("Location:home.php");
+
               }
               else
               {
@@ -74,12 +53,44 @@
 
 
           }
+ ?>
+<!DOCTYPE html>
+<html>
+<head>
+	<title>in webmarketplace</title>
+
+
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+  <link rel="stylesheet" href="CSS/cart.css" type="text/css">      
+
+    
+
+   
+</head>
+<body>
+<section>
+  
+
+<?php 
+  
       //select the closest query that would match
       $sql="select * from products where Id IN (".implode(",",$Ids).")";
     
       $result = $conn->query($sql);
-      $allRecords = $result->fetch_all(MYSQLI_ASSOC);
-
+      if($result)
+      {
+        $allRecords = $result->fetch_all(MYSQLI_ASSOC);
+      }
+      else
+      {
+        echo "<h1> your cart is empty :( </h1>";
+        exit;
+      }
       
       
 
@@ -94,7 +105,9 @@
 
 <!-- panel on the left -->
       <!-- start of the item -->
+      <?php $qCounter = 0; ?>
       <?php foreach($allRecords as $record){ 
+        //change to new image file paths 
         $noImage = "./pics/no-image.png";
           $path = "./pics/".$record['Id'];
         $files = glob($path."*.{jpg,jpeg,png,gif}", GLOB_BRACE);
@@ -112,6 +125,8 @@
             <p class="card-text"><?php echo $record['Details']?></p>
             <br>
             <p class="card-text">Price : <?php echo $record['Price']?></p>
+            <br>
+            <p class = "card -text">quantity: <?php echo $quantities[$qCounter]; $qCounter++;?></p>
         </div>
         <div class="w-100"></div>
         

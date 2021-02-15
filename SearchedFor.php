@@ -34,8 +34,10 @@
 			$GLOBALS['noOfPages'] = $noOfPages;
 			for($i = $startingIndex;$i < $end; $i++)
 			{
-				$path = "./pics/".$_SESSION['allRecords'][$i]['Id'];
-				$files = glob($path."*.{jpg,jpeg,png,gif}", GLOB_BRACE);
+				//$path = "./pics/".$_SESSION['allRecords'][$i]['Id'];
+				//$files = glob($path."*.{jpg,jpeg,png,gif}", GLOB_BRACE);
+				$path = "./images/products/".$_SESSION['allRecords'][$i]['Id'];
+				$files = glob($path, GLOB_BRACE);
 
 				//$imagePath = ("./pics/%d.%s",$row['Id']);
 				print '<div class="col-sm-3">';
@@ -128,7 +130,7 @@
 
 
 			
-			$noImagePath = "./pics/no-image.png";
+			$noImagePath = "./images/products/no-image.png";
 			
 
 			add_items($currentPage);
