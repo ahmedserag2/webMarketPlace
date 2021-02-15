@@ -110,10 +110,14 @@
 			add_items($currentPage);
 			
 		}
-		if(!empty($_GET['pn'])){
+		else
+		{
+			$currentPage = 0;
+		}
+		if(!empty($_GET['no'])){
 			//get product name
 			//pn stands for product name
-			echo "ahmmmm" .$_SERVER['HTTP_REFERER'];
+			//echo "ahmmmm" .$_SERVER['HTTP_REFERER'];
 			$query = $_GET['pn'];
 			$currentPage = (int)$_GET['no'];
 
@@ -132,6 +136,44 @@
 
 		
 		
+		}
+
+		if(empty($_GET['pn']) && empty($_GET['ProductName']) && $currentPage == 0 && empty($_GET['no']))
+		{
+			
+			$servername = "localhost";
+			$username = "root";
+			$password = "";
+			$dbname = "mydb";
+
+
+			
+			// Create connection
+			$conn = new mysqli($servername, $username, $password, $dbname);
+			// Check connection
+			if ($conn->connect_error) {
+			  die("Connection failed: " . $conn->connect_error);
+			}
+
+			//select the closest query that would match
+			$sql="select * from products";
+
+
+			print"<div class = row>";
+	
+			printf("<div class = col><h3>All products selected</h3></div>");
+			print'</div>';
+			print'<div class="row">';
+
+
+			
+			
+			$currentPage = 0;
+			$result = $conn->query($sql);
+
+			$allRecords = $result->fetch_all(MYSQLI_ASSOC);
+			$_SESSION['allRecords'] = $allRecords;
+			add_items($currentPage);
 		}
 
 	 ?>

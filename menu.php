@@ -73,9 +73,11 @@
       
 
       
-
+      <li class="nav-item active">
+              <a class="nav-link" href="SearchedFor.php?ProductName="><i class="fa fa-home"></i> All Products <span class="sr-only">(current)</span></a>
+              </li>
       <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <a class="nav-link dropdown-toggle" href="" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           <i class="fa fa-shopping-basket"></i> Products
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
