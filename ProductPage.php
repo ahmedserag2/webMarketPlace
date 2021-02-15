@@ -141,34 +141,18 @@
 <!-- slider and product details -->
 <div class="row">
   <div class="col-6 col-md-3">
-	<div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
-	    <ol class="carousel-indicators">
-	        <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
-	        <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
-	    </ol>
-	    <div class="caousel-inner">
-	        <div class="carousel-item active">
+	
             <!-- add a loop here to read each pic -->
-	            <img class="d-block w-100" src="//placehold.it/200" alt="First slide">
-	            <div class="carousel-caption d-none d-md-block">
-	                <h5>My Caption Title (1st Image)</h5>
-	                <p>The whole caption will only show up if the screen is at least medium size.</p>
-	            </div>
-	        </div>
-	        
-	        <div class="carousel-item">
-	            <img class="d-block w-100" src="//placehold.it/200" alt="Third slide">
-	        </div>
-	    </div>
-	    <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
-	        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-	        <span class="sr-only">Previous</span>
-	    </a>
-	    <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
-	        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-	        <span class="sr-only">Next</span>
-	    </a>
-	</div></div>
+            <?php
+                $path = "./images/products/".$_SESSION['allRecords'][$productIndex]['Id'];
+                $files = glob($path, GLOB_BRACE);
+                $noImagePath = "./images/products/no-image.png";
+                 $validatedPath = empty($files)? $noImage : $files[0];
+                printf('<img class="d-block w-100" src="%s" alt="First slide">', $validatedPath);
+             ?>
+	          
+	      
+</div>
   <div class="col-6 col-md-3">Description: <br><?php echo $_SESSION['allRecords'][$productIndex]['Details'];?><br>
       Price: <?php echo $_SESSION['allRecords'][$productIndex]['Price'] ;?>
       <br>
@@ -208,7 +192,7 @@
   <!-- form for the add to cart button -->
 
 
-  <input class="quantity" id = "quantity" min="0" name="quantity" value="1" type="number">
+  <input class="quantity" id = "quantity" min="1" max = "9" name="quantity" value="1" type="number">
   <button onclick="this.parentNode.querySelector('input[type=number]').stepUp()" class="plus"></button>
   </div>
 
@@ -221,7 +205,7 @@
       
          <input type="hidden" name = 'Id' id = "Id"  value = <?php echo $_SESSION['allRecords'][$productIndex]['Id'];?>>
         <input type="submit" value = "Add to Cart" onclick="setData()" class="btn btn-primary btn-lg">
-        <a href = "cart.php">go to cart</a>
+        
     </div>
 
     <div id = "msg"> </div>

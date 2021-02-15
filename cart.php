@@ -68,7 +68,7 @@ session_start();
 
   <link rel="stylesheet" href="CSS/cart.css" type="text/css">      
 
-    
+    <script src = "JS/cart.js"></script>
 
    
 </head>
@@ -127,6 +127,7 @@ session_start();
             <p class="card-text">Price : <?php echo $record['Price']?></p>
             <br>
             <p class = "card -text">quantity: <?php echo $quantities[$qCounter]; $qCounter++;?></p>
+            <button class = "btn btn-danger" onclick = "removeProduct()"><i class="fa fa-trash"></i></button>
         </div>
         <div class="w-100"></div>
         
