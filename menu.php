@@ -38,10 +38,12 @@
           {
             //find a better place for this line 
            // echo '<a class="navbar-brand" href="home.php">Welcome '.$_SESSION["user"]["firstName"].'</a>';
-            if ($_SESSION["user"]["Role"] == 1) {
-              echo '<li class="nav-item active">
+              
+            echo '<li class="nav-item active">
               <a class="nav-link" href="#profile.php"><i class="fa fa-home"></i> My Profile <span class="sr-only">(current)</span></a>
               </li>';
+            if ($_SESSION["user"]["Role"] == 1) {
+              
 
             } else if ($_SESSION["user"]["Role"] == 2){
                echo '<li class="nav-item active">
@@ -100,4 +102,6 @@
 </nav>
 
 </body>
+
 </html>
+
