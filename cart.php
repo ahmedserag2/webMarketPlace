@@ -9,10 +9,20 @@ session_start();
  
   $Ids = array();
   $quantities = array();
+if(isset($_SESSION['cartItems'])){
   foreach($_SESSION['cartItems'] as $cartItem){
-      array_push(  $Ids,(int)$cartItem['Id']);//echo $cartItem['Id'] . "  hehe " .$cartItem['quantity'];
-      array_push($quantities,(int)$cartItem['quantity']);
+  		try {
+		    array_push(  $Ids,(int)$cartItem['Id']);//echo $cartItem['Id'] . "  hehe " .$cartItem['quantity'];
+    		array_push($quantities,(int)$cartItem['quantity']);
+		} 
+		catch (Exception $e) 
+		{
+		   // echo 'Caught exception: ',  $e->getMessage(), "\n";
+		}
+  	//echo $cartItem['Id'] . "  hehe " .$cartItem['quantity'];
+      
   }
+}
 
   $noOfItems = count($Ids);
 
@@ -32,26 +42,32 @@ session_start();
         die("Connection failed: " . $conn->connect_error);
       }
        if($_SERVER['REQUEST_METHOD'] == 'POST')
-          {
-              $idStr = implode( ",", $Ids);
-              $quantityStr = implode("," , $quantities);
-              echo "testingg ". $quantityStr;
-              //customer id will be a session
-              $sqlInsert = "INSERT INTO `invoice` (`productIds`, `customerId`, `ProductQuantities`) 
-              VALUES ('$idStr', 0, '$quantityStr')";
-              if($conn->query($sqlInsert))
-              {
-                  unset($_SESSION['cartItems']);
-                  unset($_SESSION['inSession']);
-                  header("Location:home.php");
+        {
 
-              }
-              else
-              {
-                echo "error inserting " . $conn->error;
-              }
+	          	if(isset($_POST['checkout']))
+	          	{
+	              $idStr = implode( ",", $Ids);
+	              $quantityStr = implode("," , $quantities);
+	              //echo "testingg ". $quantityStr;
+	              //customer id will be a session
+	              //echo $_POST['checkout'];
+	              $sqlInsert = "INSERT INTO `invoice` (`productIds`, `customerId`, `ProductQuantities`) 
+	              VALUES ('$idStr', 0, '$quantityStr')";
+	              if($conn->query($sqlInsert))
+	              {
+	                  unset($_SESSION['cartItems']);
+	                  unset($_SESSION['inSession']);
+	                  header("Location:home.php");
 
+	              }
+	              else
+	              {
+	                echo "error inserting " . $conn->error;
+	              }
 
+	          	}
+	          	
+	          	
           }
  ?>
 <!DOCTYPE html>
@@ -69,7 +85,31 @@ session_start();
   <link rel="stylesheet" href="CSS/cart.css" type="text/css">      
 
     <script src = "JS/cart.js"></script>
+    <script>
+    	function refresh(Id)
+		{
+			btnId = Id;
+			//alert(btnId);
+			 jQuery.ajax({
+			 	//
+            url:"DeleteFromCartSession.php",
+            data:'removeItem='+$("#"+Id).val(),
+            type:"POST",
 
+            success:function(data)
+            {
+            	//alert(data);
+            	//alert($(btnId).val());
+            	//$( "#" + Id).remove();
+             	
+             
+            }
+          });
+			
+			//location.reload();
+		}
+
+    </script>
    
 </head>
 <body>
@@ -89,6 +129,7 @@ session_start();
       else
       {
         echo "<h1> your cart is empty :( </h1>";
+        echo "<img src = './images/products/catsearch.gif' >";
         exit;
       }
       
@@ -115,7 +156,7 @@ session_start();
        // echo implode(',', $files);
           $validatedPath = empty($files)? $noImage : $files[0];
         ?>
-  <div class="card flex-row flex-wrap">
+  <div id = <?php echo $record['Id'] ?> class="card flex-row flex-wrap">
         <div class="card-header border-0">
 
             <img src = <?php echo "'".$validatedPath."'" ;?> alt = "" >
@@ -127,7 +168,13 @@ session_start();
             <p class="card-text">Price : <?php echo $record['Price']?></p>
             <br>
             <p class = "card -text">quantity: <?php echo $quantities[$qCounter]; $qCounter++;?></p>
-            <button class = "btn btn-danger" onclick = "removeProduct()"><i class="fa fa-trash"></i></button>
+            <form action = "" method = "POST">
+            	<button class = "btn btn-danger" onclick='refresh(this.id)' 
+            		id = <?php echo 'removeItem'.$record['Id'];?>name = <?php echo 'removeItem'.$record['Id'];?> value = <?php echo $record['Id'] ?>><i class="fa fa-trash"></i></button>
+
+
+            	<input type = 'text' name = 'removeItem' id =  'removeItem' value = <?='removeItem'.$record['Id'];?>>
+        	</form>
         </div>
         <div class="w-100"></div>
         
@@ -184,7 +231,7 @@ session_start();
             </li>
           </ul>
             <form action = "" method = "POST">
-                 <input type="submit" class="btn btn-primary btn-block" value = "checkout">
+                 <input type="submit" name = "checkout" class="btn btn-primary btn-block" value = "checkout">
             </form>
         </div>
       </div>

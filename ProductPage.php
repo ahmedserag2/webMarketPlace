@@ -144,10 +144,11 @@
 	
             <!-- add a loop here to read each pic -->
             <?php
+
                 $path = "./images/products/".$_SESSION['allRecords'][$productIndex]['Id'];
                 $files = glob($path, GLOB_BRACE);
                 $noImagePath = "./images/products/no-image.png";
-                 $validatedPath = empty($files)? $noImage : $files[0];
+                 $validatedPath = empty($files)? $noImagePath : $files[0];
                 printf('<img class="d-block w-100" src="%s" alt="First slide">', $validatedPath);
              ?>
 	          

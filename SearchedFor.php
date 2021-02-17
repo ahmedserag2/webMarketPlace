@@ -47,13 +47,16 @@
 					{
 						printf('<a href="ProductPage.php?q=%d">',$i);
 						printf('<img class="card-img-top" src="%s" alt="Card image cap">',$noImagePath);
+
 						print'</a>';
 					}
 					else
 					{
 						printf('<a href="ProductPage.php?q=%d">',$i);
 					    printf('<img class="card-img-top" src="%s" alt="Card image cap">',$files[0]);
+					
 						print'</a>';
+
 
 					}
 					printf('<a href="ProductPage.php?q=%d">',$i);
