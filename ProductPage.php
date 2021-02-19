@@ -90,7 +90,7 @@
 <?php 
 	//care because kareem might not neccisarily work with sessions 2aslan
 //getting the index from the session
-	$productIndex = $_GET['q']; 
+	
 	
 
 
@@ -105,8 +105,13 @@
     $userName = "root";
     $password = "";
     $DB = "mydb";
+    //NOTE THAT THIS IS THE PRODUCTiD 
+    $productIndex = $_GET['q']; 
 
-    $productId = $_SESSION["allRecords"][$productIndex]["Id"];
+
+
+
+    //$productId = $_SESSION["allRecords"][$productIndex]["Id"];
     $conn = mysqli_connect($serverName, $userName, $password, $DB);
 
     if(!$conn)
@@ -114,18 +119,23 @@
       die("connect failed : " . mysqli_connect_error());
     }
     //join on customerid later
-    $sqlsearch = "SELECT Details,Rating FROM reviews WHERE productId = $productId";
 
+    $sqlsearch = "SELECT Details,Rating FROM reviews WHERE productId = $productIndex";
+
+    //get product by Id
+    $sqlGetProduct = "SELECT * FROM products WHERE Id = $productIndex";
+    $productResult = $conn->query($sqlGetProduct);
+    $product = mysqli_fetch_array($productResult);
+   // echo $product['Name'];
 
     
     $result = $conn->query($sqlsearch);
-
     //change to all reviews later
     $allRecords = $result->fetch_all(MYSQLI_ASSOC);
     
     $noOfReviews = count($allRecords);
     
-    $currentRating = $_SESSION["allRecords"][$productIndex]["rating"];
+    $currentRating = $product["rating"];
 
     $ratingPerc =  $currentRating * 20;
 
@@ -134,7 +144,7 @@
 <!-- Stack the columns on mobile by making one full-width and the other half-width -->
 <div class="row">
 
-  <div class="col-12 col-md-8"><h5><?php echo $_SESSION["allRecords"][$productIndex]["Name"]; ?></h5></div>
+  <div class="col-12 col-md-8"><h5><?php echo $product["Name"]; ?></h5></div>
   
 </div>
 
@@ -145,7 +155,7 @@
             <!-- add a loop here to read each pic -->
             <?php
 
-                $path = "./images/products/".$_SESSION['allRecords'][$productIndex]['Id'];
+                $path = "./images/products/".$product['Id'];
                 $files = glob($path, GLOB_BRACE);
                 $noImagePath = "./images/products/no-image.png";
                  $validatedPath = empty($files)? $noImagePath : $files[0];
@@ -154,8 +164,8 @@
 	          
 	      
 </div>
-  <div class="col-6 col-md-3">Description: <br><?php echo $_SESSION['allRecords'][$productIndex]['Details'];?><br>
-      Price: <?php echo $_SESSION['allRecords'][$productIndex]['Price'] ;?>
+  <div class="col-6 col-md-3">Description: <br><?php echo $product['Details'];?><br>
+      Price: <?php echo $product['Price'] ;?>
       <br>
       
       <span class="score">
@@ -204,7 +214,7 @@
 <div class = "row">
     <div class= "col-6 col-md-3" id = "cartBtn">
       
-         <input type="hidden" name = 'Id' id = "Id"  value = <?php echo $_SESSION['allRecords'][$productIndex]['Id'];?>>
+         <input type="hidden" name = 'Id' id = "Id"  value = <?php echo $product['Id'];?>>
         <input type="submit" value = "Add to Cart" onclick="setData()" class="btn btn-primary btn-lg">
         
     </div>
@@ -336,14 +346,14 @@
         
 
           //review should carry the productid, userid, reviewid
-          $sqlreview = "INSERT INTO `reviews`(`productId`, `customerId`, `Rating`, `Details`) VALUES ('$productId',1,$rating
+          $sqlreview = "INSERT INTO `reviews`(`productId`, `customerId`, `Rating`, `Details`) VALUES ('$productIndex',1,$rating
           ,'$text')";
 
          
           $avgRating = ($totalRating + $rating) / ($noOfReviews + 1);
           //echo "rated: ".$rating . "<br>" . "current rating ".$currentRating . 
           //"<br>" . "total reviews: ". $noOfReviews."<br>";
-          $sqlUpdate = "UPDATE `products` SET `rating`=$avgRating WHERE Id = $productId";
+          $sqlUpdate = "UPDATE `products` SET `rating`=$avgRating WHERE Id = $productIndex";
 
           if($conn->query($sqlreview) && $conn->query($sqlUpdate))
           {

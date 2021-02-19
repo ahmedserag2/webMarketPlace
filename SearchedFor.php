@@ -45,14 +45,14 @@
 				print '<div class="card-body">';
 					if(empty($files))
 					{
-						printf('<a href="ProductPage.php?q=%d">',$i);
+						printf('<a href="ProductPage.php?q=%s">',$_SESSION['allRecords'][$i]['Id']);
 						printf('<img class="card-img-top" src="%s" alt="Card image cap">',$noImagePath);
 
 						print'</a>';
 					}
 					else
 					{
-						printf('<a href="ProductPage.php?q=%d">',$i);
+						printf('<a href="ProductPage.php?q=%s">',$_SESSION['allRecords'][$i]['Id']);
 					    printf('<img class="card-img-top" src="%s" alt="Card image cap">',$files[0]);
 					
 						print'</a>';
