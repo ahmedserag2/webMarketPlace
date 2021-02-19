@@ -34,6 +34,8 @@
          <a class="nav-link" href="home.php"><i class="fa fa-home"></i> Home <span class="sr-only">(current)</span></a>
         </li>';
 
+         
+
 
           if(isset($_SESSION['loggedIn']) && $_SESSION['loggedIn'] == true)
           {
@@ -44,10 +46,18 @@
               <a class="nav-link" href="#profile.php"><i class="fa fa-user"></i> My Profile <span class="sr-only">(current)</span></a>
               </li>';
 
+                echo '<li class="nav-item active">
+           <a class="nav-link" href="messagesMenu.php"><i class="fa fa-home"></i>messages <span class="sr-only">(current)</span></a>
+          </li>';
+
             } else if ($_SESSION["user"]["Role"] == 2){
                echo '<li class="nav-item active">
               <a class="nav-link" href="Admin_products.php"><i class="fa fa-user"></i> Admin <span class="sr-only">(current)</span></a>
               </li>';
+
+                echo '<li class="nav-item active">
+           <a class="nav-link" href="messagesMenu.php"><i class="fa fa-home"></i>messages <span class="sr-only">(current)</span></a>
+          </li>';
 
             }
 
