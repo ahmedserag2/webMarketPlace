@@ -39,12 +39,12 @@
       jQuery.ajax({
 
             url:"SaveCartSession.php",
-            data:'productId='+$("#Id").val()+'&quantity='+$("#quantity").val(),
+            data:'productId='+$("#productId").val()+'&quantity='+$("#quantity").val(),
             type:"POST",
 
             success:function(data)
             {
-              showmsg("item added");
+              showmsg(data);
               addedToCart = true;
             }
           });
@@ -56,6 +56,34 @@
 
     }
 
+  }
+
+  function addReview()
+  {
+
+   rating = $(".ratingStar:checked").val();
+   productIndex = $("#productId").val();
+   totalRating = $("#totalRating").val();
+   noOfReviews = $("#noOfReviews").val();
+
+   //alert(rating);
+    jQuery.ajax({
+       
+            url:"./ajaxphp/AddReview.php",
+            data:'review='+$("#review").val()+'&rating='+rating
+            +'&productIndex='+productIndex
+            +'&totalRating='+totalRating
+            +'&noOfReviews='+noOfReviews,
+            type:"POST",
+
+            success:function(data)
+            {
+              // alert('inajax');
+              alert(data);
+              //showmsg(data);
+              
+            }
+          });
   }
 
 
@@ -136,8 +164,8 @@
     $result = $conn->query($sqlsearch);
     //change to all reviews later
     $allRecords = $result->fetch_all(MYSQLI_ASSOC);
+    $conn->close();
     
-    $noOfReviews = count($allRecords);
     
     $currentRating = $product["rating"];
 
@@ -217,10 +245,33 @@
 <!-- cart button -->
 <div class = "row">
     <div class= "col-6 col-md-3" id = "cartBtn">
-      
-         <input type="hidden" name = 'Id' id = "Id"  value = <?php echo $product['Id'];?>>
-        <input type="submit" value = "Add to Cart" onclick="setData()" class="btn btn-primary btn-lg">
-        
+      <?php 
+
+          $noOfReviews = count($allRecords);
+          $totalRating = 0;
+          foreach($allRecords as $record)
+          {
+            $totalRating += $record['Rating'];
+          }
+
+      ?>
+         <input type="hidden" name = 'productId' id = "productId"  value = <?php echo $product['Id'];?>>
+         <input type="hidden" name = 'totalRating' id = "totalRating"  value = <?php echo $totalRating;?>>
+         <input type="hidden" name = 'noOfReviews' id = "noOfReviews"  value = <?php echo $noOfReviews;?>>
+      <?php
+       if(isset($_SESSION['user']) ){
+          //if he is a user
+          if($_SESSION['user']['Role'] == 1)
+            echo '<input type="submit" value = "Add to Cart" onclick="setData()" class="btn btn-primary btn-lg">';
+          else 
+            echo '<input type="hidden" value = "Add to Cart" onclick="setData()" class="btn btn-primary btn-lg">';   
+        }
+        else
+        {
+          echo '<input type="submit" value = "Add to Cart" onclick="setData()" class="btn btn-primary btn-lg">';
+        }
+
+        ?>
     </div>
 
     <div id = "msg"> </div>
@@ -304,32 +355,64 @@
 
   <div class = "col">
   
+    <?php 
 
-   <textarea id="review" name="review" style="height:200px"></textarea>
+        if(isset($_SESSION['user']) ){
+          //if he is a user
+          if($_SESSION['user']['Role'] == 1)
+            echo '<textarea id="review" name="review" style="height:200px"></textarea>';
+          else 
+            echo '<textarea id="review" name="review" style="height:200px" disabled></textarea>';
+        }
+        else
+        {
+          echo '<textarea id="review" name="review" style="height:200px"></textarea>';
+        }
+
+
+      
+
+   ?>
 </div>
 
 <div class = "col-3">
   <!--get the rating from here  -->
 <div class="rating">
   <label>
-    <input type="radio" name="rating" value="5" title="5 stars"> 5
+    <input type="radio" class = 'ratingStar' name="rating" value="5" title="5 stars"> 5
   </label>
   <label>
-    <input type="radio" name="rating" value="4" title="4 stars"> 4
+    <input type="radio" class = 'ratingStar' name="rating" value="4" title="4 stars"> 4
   </label>
   <label>
-    <input type="radio" name="rating" value="3" title="3 stars"> 3
+    <input type="radio" class = 'ratingStar' name="rating" value="3" title="3 stars"> 3
   </label>
   <label>
-    <input type="radio" name="rating" value="2" title="2 stars"> 2
+    <input type="radio" class = 'ratingStar' name="rating" value="2" title="2 stars"> 2
   </label>
   <label>
-    <input type="radio" name="rating" value="1" title="1 star"> 1
+    <input type="radio" class = 'ratingStar' name="rating" value="1" title="1 star"> 1
   </label>
 </div>
 </div>
   <div class = "col">
-    <input type = "submit" class="btn btn-primary btn-lg" style = "padding: 4px;">
+    <?php
+
+    if(isset($_SESSION['user']) ){
+          //if he is a user
+          if($_SESSION['user']['Role'] == 1)
+            echo '<input type = "submit" onclick="addReview()" class="btn btn-primary btn-lg" style = "padding: 4px;">';
+          else 
+            echo '<input type = "hidden" class="btn btn-primary btn-lg" style = "padding: 4px;">';
+        }
+        else
+        {
+          echo '<input type = "submit" onclick="addReview()" class="btn btn-primary btn-lg" style = "padding: 4px;">';
+        }
+
+
+        
+    ?>
   </div>
 
 
@@ -342,40 +425,7 @@
 <?php
 
       
-      //add data validation
-      $rating = 0;
-      $text = "";
-      if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['rating']) && isset($_POST['review']))
-      {
-
-          $rating = $_POST['rating']; 
-          $text = $_POST['review'];
-          
-         
-        
-          //$userId = $_SESSION['user']['Id'];
-          //review should carry the productid, userid, reviewid
-          $sqlreview = "INSERT INTO `reviews`(`productId`, `customerId`, `Rating`, `Details`) VALUES ('$productIndex',26,$rating
-          ,'$text')";
-
-         
-          $avgRating = ($totalRating + $rating) / ($noOfReviews + 1);
-          //echo "rated: ".$rating . "<br>" . "current rating ".$currentRating . 
-          //"<br>" . "total reviews: ". $noOfReviews."<br>";
-          $sqlUpdate = "UPDATE `products` SET `rating`=$avgRating WHERE Id = $productIndex";
-
-          if($conn->query($sqlreview) && $conn->query($sqlUpdate))
-          {
-            echo "";
-          }
-          else
-          {
-            echo "Error: ".$sql . "<br>". $conn->error;
-
-          }
-         
-      }
-       $conn ->close();
+   
  ?>
 
 
