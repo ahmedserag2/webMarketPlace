@@ -72,43 +72,48 @@ if(isset($_SESSION['cartItems'])){
   if($_SERVER['REQUEST_METHOD'] == 'POST')
         {
 
-              if(isset($_POST['checkout']) && !empty($_POST['address']))
+              if(isset($_POST['checkout']))
               {
-                $idStr = implode( ",", $Ids);
-                $quantityStr = implode("," , $quantities);
-                //echo "testingg ". $quantityStr;
-                //customer id will be a session
-                //echo $_POST['checkout'];
-                
-                
-                $userId = $_SESSION['user']['Id'];
-                $address = $_POST['address'];
+                  if(!empty($_POST['address']))
+                  {
+                        $idStr = implode( ",", $Ids);
+                    $quantityStr = implode("," , $quantities);
+                    //echo "testingg ". $quantityStr;
+                    //customer id will be a session
+                    //echo $_POST['checkout'];
+                    
+                    
+                    $userId = $_SESSION['user']['Id'];
+                    $address = $_POST['address'];
 
-                $sqlInsert = "INSERT INTO 
-                `invoice` (`productIds`, `customerId`, `ProductQuantities`,`TotalPrice`,`Address`) 
-                VALUES ('$idStr', '$userId', '$quantityStr','$totalWithTax','$address')";
-                if($conn->query($sqlInsert))
-                {
-                    unset($_SESSION['cartItems']);
-                   unset($_SESSION['inSession']);
-                   //                 echo $totalWithTax;
+                    $sqlInsert = "INSERT INTO 
+                    `invoice` (`productIds`, `customerId`, `ProductQuantities`,`TotalPrice`,`Address`) 
+                    VALUES ('$idStr', '$userId', '$quantityStr','$totalWithTax','$address')";
+                    if($conn->query($sqlInsert))
+                    {
+                        unset($_SESSION['cartItems']);
+                       unset($_SESSION['inSession']);
+                       //                 echo $totalWithTax;
 
-                    echo "<script>
-                        alert('order placed successfully address confirmed view your orders tab');
-                          window.location.href='home.php';
-                        </script>";
+                        echo "<script>
+                            alert('order placed successfully address confirmed view your orders tab');
+                              window.location.href='home.php';
+                            </script>";
 
+                    }
+                    else
+                    {
+                      echo "error inserting " . $conn->error;
+                    }
                 }
                 else
                 {
-                  echo "error inserting " . $conn->error;
+                  $errormsg = "please enter a valid address so we can reach you ";
                 }
+                
 
               }
-              else
-              {
-                $errormsg = "please enter a valid address so we can reach you ";
-              }
+             
               
               
           }
@@ -136,13 +141,13 @@ if(isset($_SESSION['cartItems'])){
   			//alert(btnId);
   			 jQuery.ajax({
   			 	//
-              url:"DeleteFromCartSession.php",
+              url:"./ajaxphp/DeleteFromCartSession.php",
               data:'removeItem='+$("#"+Id).val(),
               type:"POST",
 
               success:function(data)
               {
-              	//alert(data);
+              //	alert(data);
               	//alert($(btnId).val());
               	//$( "#" + Id).remove();
                	

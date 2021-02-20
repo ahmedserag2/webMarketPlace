@@ -1,4 +1,5 @@
 <?php   //add data validation
+  session_start();
       $rating = 0;
       $text = "";
      // echo "got into file ";
@@ -8,6 +9,8 @@
       $msg = "";
       
       echo $_POST['review'];
+      if(isset($_SESSION['user']))
+      {
         if($_SERVER['REQUEST_METHOD'] == 'POST' && $_POST['rating'] !== 'undefined' && isset($_POST['review']))
         {
 
@@ -24,11 +27,12 @@
           }
             $rating = $_POST['rating']; 
             $text = $_POST['review'];
-            
-          
+
+            $reviewerId = $_SESSION['user']['Id'];
             //$userId = $_SESSION['user']['Id'];
             //review should carry the productid, userid, reviewid
-            $sqlreview = "INSERT INTO `reviews`(`productId`, `customerId`, `Rating`, `Details`) VALUES ('$productIndex',26,$rating
+            $sqlreview = "INSERT INTO `reviews`(`productId`, `customerId`, `Rating`, `Details`) 
+            VALUES ('$productIndex','$reviewerId',$rating
             ,'$text')";
 
            
@@ -55,7 +59,11 @@
           echo "please submit a rating and review first";
         }
       
-      
+      }
+      else
+      {
+        $msg = "you need to create an accoutn for this matter";
+      }
 
       echo $msg;
 

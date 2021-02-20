@@ -38,7 +38,7 @@
     {
       jQuery.ajax({
 
-            url:"SaveCartSession.php",
+            url:"./ajaxphp/SaveCartSession.php",
             data:'productId='+$("#productId").val()+'&quantity='+$("#quantity").val(),
             type:"POST",
 
