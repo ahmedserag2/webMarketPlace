@@ -120,7 +120,11 @@
     }
     //join on customerid later
 
-    $sqlsearch = "SELECT Details,Rating FROM reviews WHERE productId = $productIndex";
+    $sqlsearch = "SELECT R.Details,R.Rating ,U.firstName,U.lastName
+    FROM reviews R
+    JOIN user U
+    ON R.customerId = U.Id
+     WHERE productId = $productIndex";
 
     //get product by Id
     $sqlGetProduct = "SELECT * FROM products WHERE Id = $productIndex";
@@ -249,8 +253,11 @@
  ?>
 <div class = "row">
   
-  <div class = "col-2"><img class="d-block w-100" src="//placehold.it/200" alt="First slide"></div>
-  <div class = "col-7"><?php echo  $record['Details']; ?></div>
+  <div class = "col-2"><img class="rounded-circle w-100" src="//placehold.it/200" alt="First slide"></div>
+  <div class = "col-7">
+    <h5><?php echo $record['firstName'] . " ". $record['lastName']; ?></h5>
+    <?php echo  $record['Details']; ?>
+  </div>
   <div class = "col-3">
       <span class="score">
       <div class="score-wrap">
@@ -296,7 +303,9 @@
 
 
   <div class = "col">
-  <input type = "textarea"  name = "review" id = "review">
+  
+
+   <textarea id="review" name="review" style="height:200px"></textarea>
 </div>
 
 <div class = "col-3">
@@ -320,7 +329,7 @@
 </div>
 </div>
   <div class = "col">
-    <input type = "submit">
+    <input type = "submit" class="btn btn-primary btn-lg" style = "padding: 4px;">
   </div>
 
 
@@ -344,9 +353,9 @@
           
          
         
-
+          //$userId = $_SESSION['user']['Id'];
           //review should carry the productid, userid, reviewid
-          $sqlreview = "INSERT INTO `reviews`(`productId`, `customerId`, `Rating`, `Details`) VALUES ('$productIndex',1,$rating
+          $sqlreview = "INSERT INTO `reviews`(`productId`, `customerId`, `Rating`, `Details`) VALUES ('$productIndex',26,$rating
           ,'$text')";
 
          

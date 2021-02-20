@@ -1,9 +1,9 @@
 <?php
 session_start();
-  include 'menu.php';
-
+include "menu.php";
   $totalPrice = 0;
   $totalWithTax = 0;
+  $errormsg = "";
 //$_SESSION['cartItems']= array();
   //echo count($_SESSION['cartItems']);
  
@@ -24,7 +24,6 @@ if(isset($_SESSION['cartItems'])){
   }
 }
 
-  $noOfItems = count($Ids);
 
   //  echo "heeeeeeeeeeeee". $_SESSION['cartItems']['Id'][0];
 
@@ -41,34 +40,79 @@ if(isset($_SESSION['cartItems'])){
       if ($conn->connect_error) {
         die("Connection failed: " . $conn->connect_error);
       }
-       if($_SERVER['REQUEST_METHOD'] == 'POST')
+
+      //select the closest query that would match
+      $sql="select * from products where Id IN (".implode(",",$Ids).")";
+    
+      $result = $conn->query($sql);
+      if($result)
+      {
+        $allRecords = $result->fetch_all(MYSQLI_ASSOC);
+      }
+      else
+      {
+        echo "<h1> your cart is empty :( </h1>";
+        echo "<img src = './images/products/catsearch.gif' >";
+        exit;
+      }
+      
+      
+      $qCounter = 0;
+      foreach($allRecords as $record)
+      {
+           $totalPrice += $record['Price']*$quantities[$qCounter];
+
+
+        //tax rate is 0.101
+        $totalWithTax += $record['Price']*$quantities[$qCounter] * (1 + 0.101);
+        $qCounter++;
+      }
+      $qCounter =0;
+
+  if($_SERVER['REQUEST_METHOD'] == 'POST')
         {
 
-	          	if(isset($_POST['checkout']))
-	          	{
-	              $idStr = implode( ",", $Ids);
-	              $quantityStr = implode("," , $quantities);
-	              //echo "testingg ". $quantityStr;
-	              //customer id will be a session
-	              //echo $_POST['checkout'];
-	              $sqlInsert = "INSERT INTO `invoice` (`productIds`, `customerId`, `ProductQuantities`) 
-	              VALUES ('$idStr', 0, '$quantityStr')";
-	              if($conn->query($sqlInsert))
-	              {
-	                  unset($_SESSION['cartItems']);
-	                  unset($_SESSION['inSession']);
-	                  header("Location:home.php");
+              if(isset($_POST['checkout']) && !empty($_POST['address']))
+              {
+                $idStr = implode( ",", $Ids);
+                $quantityStr = implode("," , $quantities);
+                //echo "testingg ". $quantityStr;
+                //customer id will be a session
+                //echo $_POST['checkout'];
+                
+                
+                $userId = $_SESSION['user']['Id'];
+                $address = $_POST['address'];
 
-	              }
-	              else
-	              {
-	                echo "error inserting " . $conn->error;
-	              }
+                $sqlInsert = "INSERT INTO 
+                `invoice` (`productIds`, `customerId`, `ProductQuantities`,`TotalPrice`,`Address`) 
+                VALUES ('$idStr', '$userId', '$quantityStr','$totalWithTax','$address')";
+                if($conn->query($sqlInsert))
+                {
+                    unset($_SESSION['cartItems']);
+                   unset($_SESSION['inSession']);
+                   //                 echo $totalWithTax;
 
-	          	}
-	          	
-	          	
+                    echo "<script>
+                        alert('order placed successfully address confirmed view your orders tab');
+                          window.location.href='home.php';
+                        </script>";
+
+                }
+                else
+                {
+                  echo "error inserting " . $conn->error;
+                }
+
+              }
+              else
+              {
+                $errormsg = "please enter a valid address so we can reach you ";
+              }
+              
+              
           }
+       
  ?>
 <!DOCTYPE html>
 <html>
@@ -86,28 +130,31 @@ if(isset($_SESSION['cartItems'])){
 
     <script src = "JS/cart.js"></script>
     <script>
-    	function refresh(Id)
-		{
-			btnId = Id;
-			//alert(btnId);
-			 jQuery.ajax({
-			 	//
-            url:"DeleteFromCartSession.php",
-            data:'removeItem='+$("#"+Id).val(),
-            type:"POST",
+    	function removeFromCart(Id)
+  		{
+  			btnId = Id;
+  			//alert(btnId);
+  			 jQuery.ajax({
+  			 	//
+              url:"DeleteFromCartSession.php",
+              data:'removeItem='+$("#"+Id).val(),
+              type:"POST",
 
-            success:function(data)
-            {
-            	//alert(data);
-            	//alert($(btnId).val());
-            	//$( "#" + Id).remove();
-             	
-             
-            }
-          });
-			
-			//location.reload();
-		}
+              success:function(data)
+              {
+              	//alert(data);
+              	//alert($(btnId).val());
+              	//$( "#" + Id).remove();
+               	
+               
+              }
+            });
+          
+
+  			//location.reload();
+  		}
+
+
 
     </script>
    
@@ -117,23 +164,6 @@ if(isset($_SESSION['cartItems'])){
   
 
 <?php 
-  
-      //select the closest query that would match
-      $sql="select * from products where Id IN (".implode(",",$Ids).")";
-    
-      $result = $conn->query($sql);
-      if($result)
-      {
-        $allRecords = $result->fetch_all(MYSQLI_ASSOC);
-      }
-      else
-      {
-        echo "<h1> your cart is empty :( </h1>";
-        echo "<img src = './images/products/catsearch.gif' >";
-        exit;
-      }
-      
-      
 
 
 ?>
@@ -146,7 +176,7 @@ if(isset($_SESSION['cartItems'])){
 
 <!-- panel on the left -->
       <!-- start of the item -->
-      <?php $qCounter = 0; ?>
+      
       <?php foreach($allRecords as $record){ 
         //change to new image file paths 
         $noImage = "./pics/no-image.png";
@@ -167,13 +197,13 @@ if(isset($_SESSION['cartItems'])){
             <br>
             <p class="card-text">Price : <?php echo $record['Price']?></p>
             <br>
-            <p class = "card -text">quantity: <?php echo $quantities[$qCounter]; $qCounter++;?></p>
+            <p class = "card -text">quantity: <?php echo $quantities[$qCounter]; ?></p>
             <form action = "" method = "POST">
-            	<button class = "btn btn-danger" onclick='refresh(this.id)' 
+            	<button class = "btn btn-danger" onclick='removeFromCart(this.id)' 
             		id = <?php echo 'removeItem'.$record['Id'];?>name = <?php echo 'removeItem'.$record['Id'];?> value = <?php echo $record['Id'] ?>><i class="fa fa-trash"></i></button>
 
 
-            	<input type = 'text' name = 'removeItem' id =  'removeItem' value = <?='removeItem'.$record['Id'];?>>
+            	
         	</form>
         </div>
         <div class="w-100"></div>
@@ -182,13 +212,9 @@ if(isset($_SESSION['cartItems'])){
 
 <?php 
 //your still in the loop :)
-  $totalPrice += $record['Price'];
-
-  //tax rate is 0.101
-  $totalWithTax += $record['Price'] * (1 + 0.101);
+ 
 //ending for each loop
 } ?>
-
 
 
   </div>
@@ -222,7 +248,7 @@ if(isset($_SESSION['cartItems'])){
             
             <li class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 mb-3">
               <div>
-                <strong>The total amount of</strong>
+                <strong>The total amount with</strong>
                 <strong>
                   <p class="mb-0">(taxes)</p>
                 </strong>
@@ -231,7 +257,9 @@ if(isset($_SESSION['cartItems'])){
             </li>
           </ul>
             <form action = "" method = "POST">
+                 <textarea id="address" name="address" style="height:50px" placeholder="enter your address here"></textarea>
                  <input type="submit" name = "checkout" class="btn btn-primary btn-block" value = "checkout">
+                 <p class = 'text-danger'><?php echo $errormsg; ?></p>
             </form>
         </div>
       </div>

@@ -50,6 +50,11 @@
            <a class="nav-link" href="messagesMenu.php"><i class="fa fa-home"></i>messages <span class="sr-only">(current)</span></a>
           </li>';
 
+          echo '
+              <li class="nav-item active">
+              <a class="nav-link" href="cart.php"><i class="fa fa-shopping-cart"></i>Cart<span class="sr-only">(current)</span></a>
+              </li>';
+
             } else if ($_SESSION["user"]["Role"] == 2){
                echo '<li class="nav-item active">
               <a class="nav-link" href="Admin_products.php"><i class="fa fa-user"></i> Admin <span class="sr-only">(current)</span></a>
@@ -79,7 +84,6 @@
               </li>';
           }
       ?>
-      
 
       
       <li class="nav-item active">
@@ -107,9 +111,7 @@
         <a class="nav-link" href="contactus.php"><i class="fa fa-info-circle"></i> Contact us</a>
       </li>
 
-        <li class="nav-item active">
-              <a class="nav-link" href="cart.php"><i class="fa fa-shopping-cart"></i>Cart<span class="sr-only">(current)</span></a>
-              </li>
+        
     </ul>
 
     <form class="form-inline my-2 my-lg-0" action = "SearchedFor.php" method = "get">

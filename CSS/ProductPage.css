@@ -9,6 +9,9 @@ body{
     -moz-appearance: textfield;
           appearance: textfield;
 }
+
+
+
 input[type=number]::-webkit-inner-spin-button, 
 input[type=number]::-webkit-outer-spin-button { 
   -webkit-appearance: none;
@@ -228,6 +231,15 @@ textarea {
     background: -webkit-linear-gradient(-45deg, #fcb551 0%, #d69a45 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+}
+
+
+#review {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  resize: vertical;
 }
 
 
