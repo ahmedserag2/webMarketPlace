@@ -62,6 +62,8 @@
 //        $sql="SELECT * FROM users WHERE Email = '$username' AND Password ='$password'";
   //      $sql2="SELECT TypeID FROM users WHERE Email ='$username'";
     //    $sql3="SELECT status FROM users WHERE Email ='$username'";
+        //put the hased password before submitting
+        $hashedpassword = sha1($password);
         $sql = "SELECT * FROM user WHERE Email = '$username' AND password = '$password'";
 	  //  $result = mysqli_query($conn,$sql);
       //  $result2 = mysqli_query($conn,$sql2);

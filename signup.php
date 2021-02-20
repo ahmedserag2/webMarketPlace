@@ -206,10 +206,12 @@ input[type=text]:placeholder {
             $lastname = $_POST['lname'];
             $email = $_POST['email'];
             $password = $_POST['Password'];
+            $hashedPass = sha1($password);
             $phonenumber = $_POST['phone'];
             $gender = $_POST['gender'];
             $DOB=$_POST["date"];
             
+            //put the hased password before submitting
             $sqlInsert = "INSERT INTO 
             `user`(`firstName`, `lastName`, `password`, `Role`,`phoneNumber`,`gender`,`Email`,`date_of_birth`)
              VALUES ('$firstname', '$lastname','$password',1,'$phonenumber','$gender','$email','$DOB')";
