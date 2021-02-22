@@ -1,6 +1,6 @@
 <html>
 <head>
-  <title> Admin - Survey</title>
+  <title> Auditor - Survey</title>
   <link rel="icon" href="images/admin.jfif" type="image/x-icon"> 
   <link href="CSS/simple-sidebar.css" rel="stylesheet">
 <style>
@@ -153,6 +153,7 @@ while ($row = $res->fetch_assoc()) {
       }
     }
     echo "<th>Action</th>";
+    echo "<th></th>";
     echo "</tr>\n";
   }
   $firstrow = 1;
@@ -172,7 +173,8 @@ while ($row = $res->fetch_assoc()) {
     $where++;
   }
     if (($rownumber <= $page*10 && abs($page*10 - $rownumber < 10)))  {
-    echo "<td><a href='Auditor_users.php?Id=".$id."' class='btn btn-dark'>send survey</a><td>";
+    echo "<td><a href='Auditor_users.php?Id=".$id."' class='btn btn-dark'>send survey</a></td>";
+    echo "<td><a href='Auditor_surveyresponses.php?Id=".$id."' class='btn btn-dark'>see responses</a></td>";
   }
     $rownumber ++;
 
