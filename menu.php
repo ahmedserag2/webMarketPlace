@@ -65,6 +65,12 @@
           </li>';
 
             }
+            else if($_SESSION["user"]["Role"] == 4)
+            {
+                echo '<li class="nav-item active">
+              <a class="nav-link" href="Auditor_surveys.php"><i class="fa fa-user"></i> Auditor <span class="sr-only">(current)</span></a>
+              </li>';
+            }
 
              echo ' <li class="nav-item active">
                 <a class="nav-link" href="signout.php"><i class="fa fa-sign-out"></i> SignOut <span class="sr-only">(current)</span></a>
