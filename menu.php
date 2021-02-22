@@ -49,7 +49,9 @@
                 echo '<li class="nav-item active">
            <a class="nav-link" href="messagesMenu.php"><i class="fa fa-home"></i>messages <span class="sr-only">(current)</span></a>
           </li>';
-
+          echo '<li class="nav-item active">
+           <a class="nav-link" href="surveyMenu.php"><i class="fa fa-home"></i>surveys <span class="sr-only">(current)</span></a>
+          </li>';
           echo '
               <li class="nav-item active">
               <a class="nav-link" href="cart.php"><i class="fa fa-shopping-cart"></i>Cart<span class="sr-only">(current)</span></a>
