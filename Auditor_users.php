@@ -75,7 +75,9 @@ if (!$conn) {
   die("Connection failed: " .mysqli_connect_error());
 }
 
+
 if (isset($_GET['send'])) {
+
   $valuesToSend = explode (",", $_GET['send']);
   for ($i = 0; $i < count($valuesToSend); $i++) {
     $v = $valuesToSend[$i];
@@ -87,7 +89,7 @@ if (isset($_GET['send'])) {
     for ($i = 0; $i < count($valuesToSend); $i++) {
     $v = $valuesToSend[$i];
     
-    
+    //echo $v;
 
     if(mysqli_num_rows($conn->query("SELECT * FROM survey_sent_to
      WHERE survey_id ='$surveyId' AND user_id = '$v'")) == 0)
@@ -162,7 +164,8 @@ while ($row = $res->fetch_assoc()) {
     if (($rownumber <= $page*10 && abs($page*10 - $rownumber < 10)))  {
       if ($where == 0) {
         $id = $colval;
-        echo "<td>&nbsp;<input type='checkbox' id='select'></td>";
+       // echo $colval;
+        echo "<td>&nbsp;<input type='checkbox' id='check".$id."' onclick='checkBoxes(".$id.")' name='select' value='".$id."'></td>";
       } else if ($where == 4) {
 
       } else if ($where == 8) {
