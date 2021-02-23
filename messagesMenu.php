@@ -15,13 +15,16 @@ include "menu.php";
             //wehre Id = $selectedId
             //$sql= "SELECT * FROM logs WHERE Id = 1";
             $receiverId = $_SESSION['user']['Id'];
-            $sql = "SELECT DISTINCT l.content, u.firstName,l.reg_date,l.senderId,l.receiverId
-             FROM `logs` l 
-             JOIN `user` u
-              ON l.senderId = u.Id
-              WHERE l.receiverId = $receiverId
-              GROUP BY l.receiverId,l.senderId
-              ORDER BY reg_date";
+            $sql = "SELECT l2.*, u.firstName, u.lastName 
+			FROM logs l2
+			JOIN user u
+			ON l2.senderId = u.Id
+			WHERE l2.Id IN (SELECT  max(l.Id) FROM logs l
+					              WHERE l.receiverId = $receiverId
+					              GROUP BY l.receiverId,l.senderId
+					              ORDER BY reg_date)";
+
+
             //$result = mysqli_query($conn,$sql); 
             $result = $conn->query($sql);
             $allRecords = $result->fetch_all(MYSQLI_ASSOC);
@@ -50,7 +53,15 @@ include "menu.php";
       	<?php foreach($allRecords as $record){
       		$senderId = $record['senderId'];
         
-        printf('<a href="chat.php?receiver=%s" class="list-group-item list-group-item-action bg-secondary text-light show"><span class="text-nowrap"><i class="fa fa-plus-square"></i> %s </a></span>',$record['senderId'],$record['firstName']);
+	        if($record['seen'])
+	        {
+	        	printf('<a href="chat.php?receiver=%s" class="list-group-item list-group-item-action bg-secondary text-light show" style = "font-style:italic;"><span class="text-nowrap"><i class="fa fa-plus-square"></i> %s </a></span>',$record['senderId'],$record['firstName']);	
+	        }
+	        else
+	        {
+	        	printf('<a href="chat.php?receiver=%s" class="list-group-item list-group-item-action bg-secondary text-light show" style = "font-weight:bold;"><span class="text-nowrap"><i class="fa fa-plus-square"></i> %s </a></span>',$record['senderId'],$record['firstName']);		
+	        }
+	        
         }
 
 

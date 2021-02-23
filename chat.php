@@ -305,6 +305,12 @@ function loginForm(){
                 (l.senderId = $sender) OR 
                 (l.receiverId = $sender)
                 ORDER BY reg_date";
+
+                //echo $sender;
+                $conn->query("UPDATE logs SET seen = 1 WHERE Id =  (SELECT  max(l.Id) FROM logs l
+                              WHERE l.senderId = $receiver
+                              GROUP BY l.senderId
+                              ORDER BY reg_date)");
             }
             else if($_SESSION['user']['Role'] == 2)
             {
@@ -316,9 +322,17 @@ function loginForm(){
                 (l.senderId = $receiver) OR 
                 (l.receiverId = $receiver)
                 ORDER BY reg_date"; 
+
+                $conn->query("UPDATE logs SET seen = 1 WHERE Id =  (SELECT  max(l.Id) FROM logs l
+                              WHERE l.senderId = $receiver
+                              GROUP BY l.receiverId
+                              ORDER BY reg_date)");
             }
             //$result = mysqli_query($conn,$sql); 
             $result = $conn->query($sql);
+            //echo $receiver;
+            
+
 
             $allRecords = $result->fetch_all(MYSQLI_ASSOC);
             $contents = "";

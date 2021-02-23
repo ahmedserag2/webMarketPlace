@@ -31,7 +31,7 @@ if(isset($_POST['text']))
             echo $text;
             //sender will be $_SESSION['user']['Id']
             $sender = $_SESSION['user']['Id'];
-            $sql = "INSERT INTO `logs`(`content`, `receiverId`, `senderId`) VALUES ('$text','$receiver','$sender')";
+            $sql = "INSERT INTO `logs`(`content`, `receiverId`, `senderId`,`seen`) VALUES ('$text','$receiver','$sender',0)";
             $result = mysqli_query($conn,$sql); 
            // echo 'heloooooooo';
             
