@@ -70,7 +70,7 @@
             else if($_SESSION["user"]["Role"] == 3)
             {
                echo '<li class="nav-item active">
-              <a class="nav-link" href="Hr_peanlty.php"><i class="fa fa-user"></i> HR <span class="sr-only">(current)</span></a>
+              <a class="nav-link" href="hr_users.php"><i class="fa fa-user"></i> HR <span class="sr-only">(current)</span></a>
               </li>';
             }
             else if($_SESSION["user"]["Role"] == 4)

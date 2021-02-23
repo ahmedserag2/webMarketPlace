@@ -274,7 +274,16 @@ function loginForm(){
 				<br>
 				<img src = 'Capture1.PNG'>
 				
-               <!-- <p class="logout"><a id="exit" href="#">Exit Chat</a></p>-->
+                <?php 
+                if($_SESSION['user']['Role'] == 4)
+                {
+                echo '<form action = "" method = "POST">
+
+                  <input class = "btn-danger" id="report" name = "report" type = submit value = "report">
+
+                </form>';
+              }
+                ?>
             </div>
  
             <div id="chatbox">
@@ -292,11 +301,20 @@ function loginForm(){
 
             //wehre Id = $selectedId
             //$sql= "SELECT * FROM logs WHERE Id = 1";
+
             $sender = $_SESSION['user']['Id'];
+            if($_SESSION['user']['Role'] == 4)
+            {
+              $sender = $_GET['sender'];
+            }
             $receiver = $_GET['receiver'];
+
+
+
             $sql = "";
             if($_SESSION['user']['Role'] == 1)
             {
+              
               $sql = "SELECT l.content, u.firstName sender,l.reg_date,l.senderId
                FROM `logs` l 
                JOIN `user` u
@@ -304,7 +322,7 @@ function loginForm(){
                 WHERE 
                 (l.senderId = $sender) OR 
                 (l.receiverId = $sender)
-                ORDER BY reg_date";
+                ORDER BY l.Id";
 
                 //echo $sender;
                 $conn->query("UPDATE logs SET seen = 1 WHERE Id =  (SELECT  max(l.Id) FROM logs l
@@ -328,10 +346,29 @@ function loginForm(){
                               GROUP BY l.receiverId
                               ORDER BY reg_date)");
             }
+            else
+            {
+              $sql = "SELECT l.content, u.firstName sender,l.reg_date,l.senderId
+               FROM `logs` l 
+               JOIN `user` u
+                ON l.senderId = u.Id
+                WHERE 
+                (l.senderId = $receiver) OR 
+                (l.receiverId = $receiver)
+                ORDER BY reg_date"; 
+            }
             //$result = mysqli_query($conn,$sql); 
             $result = $conn->query($sql);
             //echo $receiver;
-            
+            if(isset($_POST['report']))
+            {
+
+              $conn->query("UPDATE logs SET report = 1 
+                WHERE  (senderId = $receiver) OR 
+                (receiverId = $receiver)");
+
+              
+            }
 
 
             $allRecords = $result->fetch_all(MYSQLI_ASSOC);
@@ -355,12 +392,17 @@ function loginForm(){
             $conn->close();
             ?>
             </div>
- 
-            <form name="message" action="" method="post">
+ <?php 
+      if($_SESSION['user']['Role'] != 3)
+      {
+        echo '<form name="message" action="" method="post">
                 <input name="usermsg" type="text" id="usermsg" />
-                <intput name = "receiver"  id = "receiver" type = 'hidden' value = <?php $receiver;?> >
-                <input name="submitmsg" type="submit" id="submitmsg" value="Send" onclick = 'insertMessage()' />
-            </form>
+                <intput name = "receiver"  id = "receiver" type = "hidden" value = $receiver >
+                <input name="submitmsg" type="submit" id="submitmsg" value="Send" onclick = "insertMessage()" />
+            </form>';
+      }
+ ?>
+            
         </div>
       
     </body>

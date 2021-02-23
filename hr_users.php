@@ -32,17 +32,14 @@ th {
 .button:hover {
   background-color: black;
 }
-.button.delete {
-  background-color: #b30000;
-}
-.button.delete:hover {
-    background-color: #660000;
 
-}
 </style>
 </head>
 <?php
 session_start();
+if (!$_SESSION['loggedIn'] || $_SESSION['user']['Role'] != 3) {
+    echo "<script> location.href='home.php'; </script>";
+}
 include "menu.php";
 
 ?>
@@ -54,9 +51,11 @@ include "menu.php";
     <div class="bg-dark border-right" id="sidebar-wrapper">
 
       <div class="list-group list-group-flush bg-dark">
+        <a href="hr_users.php" class="list-group-item list-group-item-action bg-secondary text-light"><span class="text-nowrap"><i class="fa fa-user"></i> Admins</a></span>
+        <a href="messagesMenu.php" class="list-group-item list-group-item-action bg-dark text-light"><span class="text-nowrap"><i class="fa fa-envelope"></i> Reports</a></span>
         
-        <a href="hr_users.php" class="list-group-item list-group-item-action bg-secondary text-light"><span class="text-nowrap"><i class="fa fa-user"></i> Users</a></span>
-        <a href="messagesMenu.php" class="list-group-item list-group-item-action bg-dark text-light"><span class="text-nowrap"><i class="fa fa-envelope"></i> messages</a></span>
+        
+        
         
       </div>
     </div>
@@ -68,6 +67,10 @@ include "menu.php";
       </nav>
       <div class="container-fluid">
         <?php
+
+        if(isset($_GET['Id']))
+          $_SESSION['$selectedSurvey'] = $_GET['Id'];
+
         $servername = "localhost";
 $username = "root";
 $password = "";
@@ -76,7 +79,45 @@ $conn = mysqli_connect($servername, $username, $password, $DB);
 if (!$conn) {
   die("Connection failed: " .mysqli_connect_error());
 }
-$res = $conn->query("SELECT * FROM user WHERE role=2 ");
+
+
+if (isset($_GET['send'])) {
+
+  $valuesToSend = explode (",", $_GET['send']);
+  for ($i = 0; $i < count($valuesToSend); $i++) {
+    $v = $valuesToSend[$i];
+    //echo "<script>alert('".$v."');</script>";
+    $valuesToSend = explode (",", $_GET['send']);
+    
+    $surveyId = $_SESSION['$selectedSurvey'];
+    
+    for ($i = 0; $i < count($valuesToSend); $i++) {
+    $v = $valuesToSend[$i];
+    
+    //echo $v;
+
+     if(mysqli_num_rows($conn->query("SELECT * FROM salaries
+     WHERE userId ='$v'")) == 0)
+    {
+        $conn->query("INSERT INTO `salaries` (`userId`,`penalty`,`salary`) VALUES ('$v',1,200)");      
+    }
+    else
+    {
+      $conn->query("UPDATE `salaries` SET `penalty` = 1 WHERE userId = $v");
+    }
+
+ 
+      
+    
+    
+  }
+  //unset($_SESSION['$selectedSurvey']);
+  echo "<script> location.href='hr_users.php'; </script>";
+    
+    
+  }
+}
+$res = $conn->query("SELECT * FROM user WHERE Role = 2");
 if (!$res) {
     //die "Query failed: (" . $res->errno . ") " . $res->error;
 }
@@ -132,7 +173,8 @@ while ($row = $res->fetch_assoc()) {
     if (($rownumber <= $page*10 && abs($page*10 - $rownumber < 10)))  {
       if ($where == 0) {
         $id = $colval;
-        echo "<td>&nbsp;<input type='checkbox' id='select'></td>";
+       // echo $colval;
+        echo "<td>&nbsp;<input type='checkbox' id='check".$id."' onclick='checkBoxes(".$id.")' name='select' value='".$id."'></td>";
       } else if ($where == 4) {
 
       } else if ($where == 8) {
@@ -152,7 +194,8 @@ while ($row = $res->fetch_assoc()) {
     }
     $where++;
   }
-    
+  
+   
     $rownumber ++;
 
   echo "</tr>\n";
@@ -164,13 +207,38 @@ $res->close();
 <?php echo '<a class="btn btn-dark" href="hr_users.php?page='.($page-1).'"><</a>' ?>
 <?php echo"<a>\t".$page."\t</a>"?>
 <?php echo '<a class="btn btn-dark" href="hr_users.php?page='.($page+1).'">></a>' ?>
-<button class='btn float-right bg-warning text-light'>Penalty</button>
+<?php echo '  <a class="btn bg-success text-light" id = "send" href = "">Add penalty</a>' ?>
 
 
       </div>
     </div>
 
   </div>
+
+
+  <script>
+  var selected = [];
+  var link = document.getElementById("send");
+  var searchBy = "Name";
+  link.setAttribute("href", "hr_users.php");
+  function checkBoxes(id) {
+    var check = document.getElementById("check"+id);
+    if (check.checked) {
+      selected.push(id);
+    } else {
+      var ind = selected.indexOf(id);
+      if (ind > -1) {
+        selected.splice(ind, 1);
+      }
+    }
+    
+    if (selected.length > 0) {
+      link.setAttribute("href", "hr_users.php?send="+selected.join(",")+"");
+    } else {
+      link.setAttribute("href", "hr_users.php");
+    }
+  }
+</script>
 </body>
 
 </html>

@@ -43,6 +43,7 @@ include "menu.php";
 
       <div class="list-group list-group-flush bg-dark">
         <a href="Auditor_surveys.php" class="list-group-item list-group-item-action bg-secondary text-light show"><span class="text-nowrap"><i class="fa fa-plus-square"></i> surveys</a></span>
+        <a href="messagesMenu.php" class="list-group-item list-group-item-action bg-dark text-light show"><span class="text-nowrap"><i class="fa fa-plus-square"></i>Messages</a></span>
         
       </div>
     </div>
