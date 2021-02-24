@@ -196,22 +196,25 @@ function loginForm(){
 		</style>
 
       <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    
         <script type="text/javascript">
-
-          function insertMessage()
+          
+          function insertMessage(sender)
           {
             //alert('function fired');
                 jQuery.ajax({
             //
                 url:"./ajaxphp/AjaxChatSend.php",
                 data:'text='+$("#usermsg").val()+
-                '&receiver='+<?php echo $_GET['receiver'];?>,
+                '&receiver='+<?php echo $_GET['receiver'];?>+
+                '&sender='+sender,
 
                 type:"POST",
 
                 success:function(data)
                 {
 
+                  //alert(data);
                   //alert(data);
                   //alert($(btnId).val());
                   //$( "#" + Id).remove();
@@ -315,7 +318,7 @@ function loginForm(){
             if($_SESSION['user']['Role'] == 1)
             {
               
-              $sql = "SELECT l.content, u.firstName sender,l.reg_date,l.senderId
+              $sql = "SELECT l.content, u.firstName sender,l.reg_date,l.senderId,l.comment
                FROM `logs` l 
                JOIN `user` u
                 ON l.senderId = u.Id
@@ -332,7 +335,7 @@ function loginForm(){
             }
             else if($_SESSION['user']['Role'] == 2)
             {
-                $sql = "SELECT l.content, u.firstName sender,l.reg_date,l.senderId
+                $sql = "SELECT l.content, u.firstName sender,l.reg_date,l.senderId,l.comment
                FROM `logs` l 
                JOIN `user` u
                 ON l.senderId = u.Id
@@ -348,7 +351,7 @@ function loginForm(){
             }
             else
             {
-              $sql = "SELECT l.content, u.firstName sender,l.reg_date,l.senderId
+              $sql = "SELECT l.content, u.firstName sender,l.reg_date,l.senderId,l.comment
                FROM `logs` l 
                JOIN `user` u
                 ON l.senderId = u.Id
@@ -376,15 +379,23 @@ function loginForm(){
             //Select all where 
             foreach($allRecords as $record){
 
-              if($_SESSION['user']['Id'] == $record['senderId'])
+              if($record['comment'] == 1)
               {
-                   echo "<div class='msgln'><span class='chat-time'>".$record['reg_date']."</span> <b class='user-name'>you</b> ".stripslashes(htmlspecialchars($record['content']))."<br></div>";
-           
+                echo "<div class='msgln'><span class='chat-time'>".$record['reg_date']."</span> <b class='user-name'>super visor</b> ".stripslashes(htmlspecialchars($record['content']))."<br></div>";
               }
               else
               {
-                echo "<div class='msgln'><span class='chat-time'>".$record['reg_date']."</span> <b class='user-name'>".$record['sender']."</b> ".stripslashes(htmlspecialchars($record['content']))."<br></div>";
-              }
+                if($_SESSION['user']['Id'] == $record['senderId'])
+                {
+                     echo "<div class='msgln'><span class='chat-time'>".$record['reg_date']."</span> <b class='user-name'>you</b> ".stripslashes(htmlspecialchars($record['content']))."<br></div>";
+             
+                }
+                else
+                {
+                  echo "<div class='msgln'><span class='chat-time'>".$record['reg_date']."</span> <b class='user-name'>".$record['sender']."</b> ".stripslashes(htmlspecialchars($record['content']))."<br></div>";
+                }
+              }  
+              
             
           }
 
@@ -395,11 +406,12 @@ function loginForm(){
  <?php 
       if($_SESSION['user']['Role'] != 3)
       {
-        echo '<form name="message" action="" method="post">
+        //echo $sender;
+        printf('<form name="message" action="" method="post">
                 <input name="usermsg" type="text" id="usermsg" />
                 <intput name = "receiver"  id = "receiver" type = "hidden" value = $receiver >
-                <input name="submitmsg" type="submit" id="submitmsg" value="Send" onclick = "insertMessage()" />
-            </form>';
+                <input name="submitmsg" type="submit" id="submitmsg" value="Send" onclick = "insertMessage(%s)" />
+            </form>',$sender);
       }
  ?>
             

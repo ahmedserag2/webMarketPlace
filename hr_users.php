@@ -89,7 +89,7 @@ if (isset($_GET['send'])) {
     //echo "<script>alert('".$v."');</script>";
     $valuesToSend = explode (",", $_GET['send']);
     
-    $surveyId = $_SESSION['$selectedSurvey'];
+    //$surveyId = $_SESSION['$selectedSurvey'];
     
     for ($i = 0; $i < count($valuesToSend); $i++) {
     $v = $valuesToSend[$i];
@@ -99,25 +99,64 @@ if (isset($_GET['send'])) {
      if(mysqli_num_rows($conn->query("SELECT * FROM salaries
      WHERE userId ='$v'")) == 0)
     {
-        $conn->query("INSERT INTO `salaries` (`userId`,`penalty`,`salary`) VALUES ('$v',1,200)");      
+        $conn->query("INSERT INTO `salaries` (`userId`,`penalty`,`salary`) VALUES ('$v',1,2000)");
+        //$salary = mysqli_fetch($conn->query("SELECT salary FROM salaries WHERE userId = $v"));
+        //$conn->query("UPDATE `salaries` (`userId`,`penalty`,`salary`) VALUES ('$v',1,200)");
+               
     }
     else
     {
-      $conn->query("UPDATE `salaries` SET `penalty` = 1 WHERE userId = $v");
-    }
+      $salary = mysqli_fetch_row($conn->query("SELECT salary FROM salaries WHERE userId = $v"));
+      //echo $salary[0];
+      $newSalary = $salary[0] * 0.75;
+      $conn->query("UPDATE `salaries` SET `salary` = $newSalary,`penalty` = 1 WHERE userId = $v AND penalty = 0");
 
- 
-      
-    
-    
+    }  
   }
   //unset($_SESSION['$selectedSurvey']);
   echo "<script> location.href='hr_users.php'; </script>";
-    
-    
   }
 }
-$res = $conn->query("SELECT * FROM user WHERE Role = 2");
+
+//depenalty
+if (isset($_GET['depenalty'])) {
+
+  $valuesToSend = explode (",", $_GET['depenalty']);
+  for ($i = 0; $i < count($valuesToSend); $i++) {
+    $v = $valuesToSend[$i];
+    //echo "<script>alert('".$v."');</script>";
+    $valuesToSend = explode (",", $_GET['depenalty']);
+    
+    //$surveyId = $_SESSION['$selectedSurvey'];
+    
+    for ($i = 0; $i < count($valuesToSend); $i++) {
+    $v = $valuesToSend[$i];
+    
+    //echo $v;
+
+     if(mysqli_num_rows($conn->query("SELECT * FROM salaries
+     WHERE userId ='$v'")) == 0)
+    {
+        
+               
+    }
+    else
+    {
+      $salary = mysqli_fetch_row($conn->query("SELECT salary FROM salaries WHERE userId = $v"));
+      //echo $salary[0];
+      $newSalary = $salary[0] / .75;
+      $conn->query("UPDATE `salaries` SET `salary` = $newSalary,`penalty` = 0 WHERE userId = $v AND penalty = 1");
+
+    }  
+  }
+  //unset($_SESSION['$selectedSurvey']);
+  echo "<script> location.href='hr_users.php'; </script>";
+  }
+}
+
+
+
+$res = $conn->query("SELECT * FROM user u LEFT JOIN salaries s ON s.userId = u.Id WHERE u.Role = 2");
 if (!$res) {
     //die "Query failed: (" . $res->errno . ") " . $res->error;
 }
@@ -153,10 +192,17 @@ while ($row = $res->fetch_assoc()) {
       } else if ($colname == "phoneNumber") {
         echo "<th>Phone number</th>";
 
-      }else if ($colname == "date_of_birth") {
-        echo "<th>Date of birth</th>";
-        
-      }  else {
+      }else if ($colname == "date_of_birth") { 
+      }
+      else if($colname == "userId")
+      {
+      } 
+      else if($colname == "Role")
+      {
+
+      }
+      else
+      {
          echo "<th>$colname</th>";
 
       }
@@ -177,16 +223,17 @@ while ($row = $res->fetch_assoc()) {
         echo "<td>&nbsp;<input type='checkbox' id='check".$id."' onclick='checkBoxes(".$id.")' name='select' value='".$id."'></td>";
       } else if ($where == 4) {
 
-      } else if ($where == 8) {
-          if ($colval == 1) {
-            echo "<td>user</td>";
-          } else if ($colval == 2){
-            echo "<td>admin</td>";
-          } else if ($colval == 3){
-            echo "<td>HR</td>";
-          } else if ($colval == 4){
-            echo "<td>auditor</td>";
-          }
+      }
+      else if($where == 7)
+      {
+
+      }
+      else if($where == 9)
+      {
+
+      } 
+      else if ($where == 8) {
+          
       }
       else {
         echo "<td>$colval</td>";
@@ -207,7 +254,8 @@ $res->close();
 <?php echo '<a class="btn btn-dark" href="hr_users.php?page='.($page-1).'"><</a>' ?>
 <?php echo"<a>\t".$page."\t</a>"?>
 <?php echo '<a class="btn btn-dark" href="hr_users.php?page='.($page+1).'">></a>' ?>
-<?php echo '  <a class="btn bg-success text-light" id = "send" href = "">Add penalty</a>' ?>
+<?php echo '  <a class="btn bg-danger text-light" id = "send" href = "">Add penalty</a>' ?>
+<?php echo '  <a class="btn bg-success text-light" id = "depenalty" href = "">remove penalty</a>' ?>
 
 
       </div>
@@ -218,9 +266,13 @@ $res->close();
 
   <script>
   var selected = [];
-  var link = document.getElementById("send");
+  //adding and removing penaltyies
+  var addLink = document.getElementById("send");
+  var removeLink = document.getElementById("depenalty");
+
   var searchBy = "Name";
-  link.setAttribute("href", "hr_users.php");
+  addLink.setAttribute("href", "hr_users.php");
+  removeLink.setAttribute("href", "hr_users.php");
   function checkBoxes(id) {
     var check = document.getElementById("check"+id);
     if (check.checked) {
@@ -233,9 +285,12 @@ $res->close();
     }
     
     if (selected.length > 0) {
-      link.setAttribute("href", "hr_users.php?send="+selected.join(",")+"");
+      addLink.setAttribute("href", "hr_users.php?send="+selected.join(",")+"");
+      removeLink.setAttribute("href", "hr_users.php?depenalty="+selected.join(",")+"");
     } else {
-      link.setAttribute("href", "hr_users.php");
+      addLink.setAttribute("href", "hr_users.php");
+     removeLink.setAttribute("href", "hr_users.php");
+       
     }
   }
 </script>
