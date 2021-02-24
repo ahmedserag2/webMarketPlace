@@ -136,7 +136,7 @@ input[type=text]:placeholder {
     
     
     body {
-    background: url('img/main_banner.jpg') fixed;
+    background: url('images/backg.jpeg') fixed;
     background-size: cover;
         
 }
@@ -251,7 +251,7 @@ input[type=text]:placeholder {
     
 <div class="container">
             <form class="form-horizontal" method="post" action="" role="form">
-                <img src="img/logo.png" class="img"><h3 style="font-weight: bold;  padding-bottom: 25;
+                <img src="images/logo.png" class="img"><h3 style="font-weight: bold;  padding-bottom: 25;
     padding-left: 60;
 align-content: center; margin-left:150;">Sign up</h3>
                 <div class="form-group">

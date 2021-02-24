@@ -1,6 +1,8 @@
 <html>
 <head>
   <link href="CSS/simple-sidebar.css" rel="stylesheet">
+  <title> Admin - Add/edit product</title>
+  <link rel="icon" href="images/admin.jfif" type="image/x-icon"> 
 <style>
 
 input[type=text], select, textarea {
@@ -70,7 +72,6 @@ input[type=submit]:hover {
 </head>
 <?php
 session_start();
-$_SESSION["err"] = 0;
 if (!$_SESSION['loggedIn'] || $_SESSION['user']['Role'] != 2) {
     echo "<script> location.href='home.php'; </script>";
 }
@@ -85,8 +86,8 @@ include "menu.php";
 
       <div class="list-group list-group-flush bg-dark">
         <a href="Admin_products.php" class="list-group-item list-group-item-action bg-dark text-light"><span class="text-nowrap"><i class="fa fa-plus-square"></i> Products</a></span>
-        <a href="users.php" class="list-group-item list-group-item-action bg-dark text-light"><span class="text-nowrap"><i class="fa fa-user"></i> Users</a></span>
-        <a href="#" class="list-group-item list-group-item-action bg-dark text-light"><span class="text-nowrap"><i class="fa fa-cog"></i> Settings</a></span>
+        <a href="Admin_users.php" class="list-group-item list-group-item-action bg-dark text-light"><span class="text-nowrap"><i class="fa fa-user"></i> Users</a></span>
+        <a href="Admin_orders.php" class="list-group-item list-group-item-action bg-dark text-light"><span class="text-nowrap"><i class="fa fa-cog"></i> Orders</a></span>
         
       </div>
     </div>
@@ -122,9 +123,9 @@ if (isset($_GET['Id']) || isset($_POST['Id'])) {
     
     if ($name == "" || $price < 0 || $price == "" || $details == "" || $file_name == "") {
       if ($action == "old") {
-        echo "<script> location.href='Admin_editproduct.php?Id=".$id."'; </script>";
+        echo "<script> location.href='Admin_editproduct.php?Id=".$id."&error=1'; </script>";
       } else {
-        echo "<script> location.href='Admin_editproduct.php?action=add'; </script>";
+        echo "<script> location.href='Admin_editproduct.php?action=add&error=1'; </script>";
       }
       $_SESSION["err"] = 1;
       return;
@@ -149,14 +150,15 @@ if (isset($_GET['Id']) || isset($_POST['Id'])) {
 
 } else if (isset($_GET['action'])){
   if ($_GET['action'] == "add") {
-      $row = array();
-      $row['Id'] = "new";
-      $row['Name'] = 'name';
-      $row['rating'] = "0";
-      $row['Price'] = "0";
-      $row['Details'] = "Description";
-      $row['img'] = 'https://placehold.it/300';
-      $row['action'] = "new";
+
+    $row = array();
+    $row['Id'] = "new";
+    $row['Name'] = 'name';
+    $row['rating'] = "0";
+    $row['Price'] = "0";
+    $row['Details'] = "Description";
+    $row['img'] = 'https://placehold.it/300';
+    $row['action'] = "new";
      
   } else {
     echo "<script> location.href='Admin_products.php'; </script>";
@@ -170,9 +172,8 @@ if (isset($_GET['Id']) || isset($_POST['Id'])) {
 
 <div class="container">
   <?php 
-  if ($_SESSION["err"] == 1) {
+  if (isset($_GET["error"])) {
     echo "<h5 style='color: red;'>Please enter product name, price, description and upload an image before proceeding. </h5>";
-    $_SESSION["err"] = 0;
     }
   ?>
   <form action="Admin_editproduct.php" method="POST" enctype="multipart/form-data">
