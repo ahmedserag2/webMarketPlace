@@ -275,5 +275,9 @@ if(isset($_SESSION['cartItems'])){
         
 
 </section>
+<?php 
+        
+        include 'footer.php'
+    ?>
 </body>
 </html>

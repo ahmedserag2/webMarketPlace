@@ -311,6 +311,10 @@ if (isset($_GET['search'])) {
   }
 </script>
   </div>
+  <?php 
+        
+        include 'footer.php'
+    ?>
 </body>
 
 </html>

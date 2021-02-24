@@ -1,11 +1,58 @@
 <!DOCTYPE html>
+<?php 
+        session_start();
+        include 'menu.php'
+    ?>
 <html>
 
 <head>
     <title>Home</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="stylesheet" type="text/css" href="slick-master/slick/slick.css"/>
+    <link rel="stylesheet" type="text/css" href="slick-master/slick/slick.css">
+    <link rel="stylesheet" type="text/css" href="slick-master/slick/slick-theme.css">
+    <style type="text/css">
+        html, body {
+        margin: 0;
+        padding: 0;
+        }
+
+        * {
+        box-sizing: border-box;
+        }
+
+        .slider {
+            width: 50%;
+            margin: 100px auto;
+        }
+
+        .slick-slide {
+        margin: 0px 20px;
+        }
+
+        .slick-slide img {
+        width: 100%;
+        }
+
+        .slick-prev:before,
+        .slick-next:before {
+        color: black;
+        }
+
+
+        .slick-slide {
+        transition: all ease-in-out .3s;
+        opacity: .2;
+        }
+        
+        .slick-active {
+        opacity: .5;
+        }
+
+        .slick-current {
+        opacity: 1;
+        }
+    </style>
     <style>
         * {box-sizing: border-box;}
         body {font-family: Verdana, sans-serif;}
@@ -55,10 +102,6 @@
         border-radius: 50%;
         display: inline-block;
         transition: background-color 0.6s ease;
-        }
-
-        .active {
-        background-color: #717171;
         }
 
         /* Fading animation */
@@ -148,6 +191,15 @@
             font-size: 35px;
             padding-bottom: 35px;
         }
+        .htitle1 {
+            color: #808080 !important;
+            text-align: center !important;
+            font-weight: 700;
+            font-family: "Century Gothic","sans-serif", "Helvetica Neue", "Helvetica", "Arial";
+            font-size: 35px;
+            padding-bottom: 35px;
+            padding-left: 13%;
+        }
         .boxes-info {
             background-color: #fff;
             text-align: left;
@@ -160,10 +212,41 @@
 </head>
 
 <body>
-    <?php 
-        include 'menu.php'
-    ?>
+<?php
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "mydB";
 
+// Create connection
+$conn = new mysqli($servername, $username, $password, $dbname);
+// Check connection
+if ($conn->connect_error) {
+  die("Connection failed: " . $conn->connect_error);
+}
+
+$sql = "SELECT * FROM `products` limit 10";
+$result = $conn->query($sql);
+$path = array();
+$RowsId = array();
+$count = 0;
+
+if ($result->num_rows > 0) {
+  // output data of each row
+  while($row = $result->fetch_assoc()) {
+    $path[$count] = "./images/products/".$row['Id'];
+    $files = glob($path[$count], GLOB_BRACE);
+    $noImagePath = "./images/products/no-image.png";
+    $validatedPath = empty($files)? $noImagePath : $files[0];
+    $path[$count] = $validatedPath;
+    $RowsId[$count] = $row['Id'];
+    $count++;
+  }
+} else {
+  echo "0 results";
+}
+$conn->close();
+?>
 <!--Start SlideShow -->
     <section>
         <div class="slideshow-container">
@@ -252,38 +335,27 @@
                     <h1 class="htitle" style="color:#808080 !important" >Ecommerce Overview </h1>
                 </div>
                 <div class="row">
-                    <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                         <div class="boxes-info">
-                            <h3>Tech Products</h3>
+                            <h3>All Products</h3>
                             <p style="height: 160px;">
                             A stroller might not sell well if the description tells of how it was thought up overnight and then handmade
                             . Similarly, a handmade leather playing card case might not sell well if all you show are the technical specs.</p>
                             <div style="text-align: center;">
-                                <a class="btn btn-lg btn-primary delay4" href="#">learn More</a>
+                                <a class="btn btn-lg btn-primary delay4" href="SearchedFor.php">learn More</a>
                             </div>
                         </div>
                     </div>
 
-                    <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                         <div class="boxes-info">
-                            <h3>Food Products</h3>
+                            <h3>Contact us</h3>
                             <p style="height: 160px;">
-                            A stroller might not sell well if the description tells of how it was thought up overnight and then handmade
-                            . Similarly, a handmade leather playing card case might not sell well if all you show are the technical specs.</p>
+                            Are easy to find so a visitor can quickly get in touch should they need it.
+                            Explain why someone should contact them, and describe how they can help solve their visitors' problems.
+                            Include an email and phone number so visitors can quickly find the right information.</p>
                             <div style="text-align: center;">
-                                <a class="btn btn-lg btn-primary delay4" href="#">learn More</a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
-                        <div class="boxes-info">
-                            <h3>Furniture Products</h3>
-                            <p style="height: 160px;">
-                            A stroller might not sell well if the description tells of how it was thought up overnight and then handmade
-                            . Similarly, a handmade leather playing card case might not sell well if all you show are the technical specs.</p>
-                            <div style="text-align: center;">
-                                <a class="btn btn-lg btn-primary delay4" href="#">learn More</a>
+                                <a class="btn btn-lg btn-primary delay4" href="contactus.php">learn More</a>
                             </div>
                         </div>
                     </div>
@@ -292,50 +364,110 @@
         </section>
     </section>
 <!-- End overview -->
-    <section>
-        <div id="primary-slider" class="splide">
-        <div class="splide__track">
-            <ul class="splide__list">
-                <li class="splide__slide">
-                    <img src="pics/1.jpg">
-                </li>
-                <li class="splide__slide">
-                    <img src="pics/2.jpg">
-                </li>
-                <li class="splide__slide">
-                    <img src="pics/3.jpg">
-                </li>
-            </ul>
-        </div>
-    </div>
-    <script>
-        var primarySlider = new Splide( '#primary-slider', {
-            type       : 'fade',
-            heightRatio: 0.5,
-            pagination : false,
-            arrows     : false,
-            cover      : true,
-        } );
-        document.addEventListener( 'DOMContentLoaded', function () {
-	new Splide( '#primary-slider', {
-		fixedWidth  : 100,
-		height      : 60,
-		gap         : 10,
-		cover       : true,
-		isNavigation: true,
-		focus       : 'center',
-		breakpoints : {
-			'600': {
-				fixedWidth: 66,
-				height    : 40,
-			}
-		},
-	} ).mount();
-} );
-    </script>
+<div class="row">
+                    <h1 class="htitle1" style="color:#808080 !important" >Products Overview </h1>
+                </div>
+    <section class="regular slider">
+            <div>
+                <?php 
+                      printf('<a href="ProductPage.php?q=%s">',$RowsId[0]);
+                      printf('<img src="%s">',$path[0]);
+                      print'</a>';
+                ?>
+                
+            </div>
+            <div>
+                <?php 
+                      printf('<a href="ProductPage.php?q=%s">',$RowsId[1]);
+                      printf('<img src="%s">',$path[1]);
+                      print'</a>';
+                ?>
+                
+            </div>
+            <div>
+                <?php 
+                      printf('<a href="ProductPage.php?q=%s">',$RowsId[2]);
+                      printf('<img src="%s">',$path[2]);
+                      print'</a>';
+                ?>
+                
+            </div>
+            <div>
+                <?php 
+                      printf('<a href="ProductPage.php?q=%s">',$RowsId[3]);
+                      printf('<img src="%s">',$path[3]);
+                      print'</a>';
+                ?>
+                
+            </div>
+            <div>
+                <?php 
+                      printf('<a href="ProductPage.php?q=%s">',$RowsId[4]);
+                      printf('<img src="%s">',$path[4]);
+                      print'</a>';
+                ?>
+                
+            </div>
+            <div>
+                <?php 
+                      printf('<a href="ProductPage.php?q=%s">',$RowsId[5]);
+                      printf('<img src="%s">',$path[5]);
+                      print'</a>';
+                ?>
+                
+            </div>
+            <div>
+                <?php 
+                      printf('<a href="ProductPage.php?q=%s">',$RowsId[6]);
+                      printf('<img src="%s">',$path[6]);
+                      print'</a>';
+                ?>
+                
+            </div>
+            <div>
+                <?php 
+                      printf('<a href="ProductPage.php?q=%s">',$RowsId[7]);
+                      printf('<img src="%s">',$path[7]);
+                      print'</a>';
+                ?>
+                
+            </div>
+            <div>
+                <?php 
+                      printf('<a href="ProductPage.php?q=%s">',$RowsId[8]);
+                      printf('<img src="%s">',$path[8]);
+                      print'</a>';
+                ?>
+                
+            </div>
+            <div>
+                <?php 
+                      printf('<a href="ProductPage.php?q=%s">',$RowsId[9]);
+                      printf('<img src="%s">',$path[9]);
+                      print'</a>';
+                ?>
+                
+            </div>
+        <script src="https://code.jquery.com/jquery-2.2.0.min.js" type="text/javascript"></script>
+        <script src="slick-master/slick/slick.js" type="text/javascript" charset="utf-8"></script>
+        
+        <script type="text/javascript">
+            $(document).on('ready', function() {
+                $(".regular").slick({
+                    dots: true,
+                    infinite: true,
+                    slidesToShow: 3,
+                    slidesToScroll: 3
+                });
+            });
+        </script>
     </section>
 
-    
-    
+    <?php 
+        
+        include 'footer.php'
+    ?>
 </body>
+
+
 </html> 

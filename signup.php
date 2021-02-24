@@ -389,6 +389,10 @@ myInput.onkeyup = function() {
 }
 </script>
 
+<?php 
+        
+        include 'footer.php'
+    ?>
         
     </body>
     </html>
