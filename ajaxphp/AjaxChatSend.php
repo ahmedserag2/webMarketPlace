@@ -30,18 +30,28 @@ if(isset($_POST['text']))
             //$sql= "SELECT * FROM logs WHERE Id = 1";
             echo $text;
             //sender will be $_SESSION['user']['Id']
+
             $sender = $_SESSION['user']['Id'];
-            $sql = "INSERT INTO `logs`(`content`, `receiverId`, `senderId`) VALUES ('$text','$receiver','$sender')";
+
+            //incase its an auditor get the id of the previous sender
+           /* if($_SESSION['user']['Role'] == 4)
+           		$sender = $_POST['sender'];*/
+            $sql = "";
+            if($_SESSION['user']['Role'] == 4)
+            	$sql = "INSERT INTO `logs`(`content`, `receiverId`, `senderId`,`seen`,`comment`) VALUES ('$text','$receiver','$sender',0,1)";
+            else
+            	$sql = "INSERT INTO `logs`(`content`, `receiverId`, `senderId`,`seen`,`comment`) VALUES ('$text','$receiver','$sender',0,0)";
+
             $result = mysqli_query($conn,$sql); 
            // echo 'heloooooooo';
             
             if($result)
             {
-            	//echo 'inserted ';
+            	echo 'inserted ';
             }
             else
             {
-
+            	echo $conn->error();
             }
             
 }

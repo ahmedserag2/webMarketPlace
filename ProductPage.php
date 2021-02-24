@@ -148,7 +148,7 @@
     }
     //join on customerid later
 
-    $sqlsearch = "SELECT R.Details,R.Rating ,U.firstName,U.lastName
+    $sqlsearch = "SELECT R.Details,R.Rating ,U.firstName,U.lastName,U.Id
     FROM reviews R
     JOIN user U
     ON R.customerId = U.Id
@@ -303,8 +303,15 @@
 
  ?>
 <div class = "row">
+  <?php
+   $path = "./images/profile/".$record['Id'];
+                $files = glob($path, GLOB_BRACE);
+                $noImagePath = "./images/products/no-image.png";
+                 $validatedPath = empty($files)? $noImagePath : $files[0];
+                //printf('<img class="d-block w-100" src="%s" alt="First slide">', $validatedPath);
+                printf('<div class = "col-2"><img class="rounded-circle w-100" src="%s" alt="First slide"></div>',$validatedPath);
+   ?>
   
-  <div class = "col-2"><img class="rounded-circle w-100" src="//placehold.it/200" alt="First slide"></div>
   <div class = "col-7">
     <h5><?php echo $record['firstName'] . " ". $record['lastName']; ?></h5>
     <?php echo  $record['Details']; ?>
