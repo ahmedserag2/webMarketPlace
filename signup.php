@@ -211,6 +211,7 @@ input[type=text]:placeholder {
             $gender = $_POST['gender'];
             $DOB=$_POST["date"];
             
+            $file_name = $_FILES['image']['name'];
             //put the hased password before submitting
             $sqlInsert = "INSERT INTO 
             `user`(`firstName`, `lastName`, `password`, `Role`,`phoneNumber`,`gender`,`Email`,`date_of_birth`)
@@ -219,7 +220,7 @@ input[type=text]:placeholder {
             $mailExists = mysqli_query($conn,$sqlmail);
 
             echo mysqli_num_rows($conn->query($sqlmail));
-
+            //$row['img'] = "images/users/".$id;
           
           //if email not found 
               if(mysqli_num_rows($conn->query($sqlmail)) == 0)
@@ -227,6 +228,9 @@ input[type=text]:placeholder {
                 $result = mysqli_query($conn,$sqlInsert);
                   if($result)	
           		    {
+                    $id = $conn->insert_id;
+
+                    move_uploaded_file($_FILES['image']['tmp_name'],"images/users/".$id);
           			     echo "<script>
                         alert('Submitted successfully');
                          window.location.href='signin.php';
@@ -250,7 +254,7 @@ input[type=text]:placeholder {
     
     
 <div class="container">
-            <form class="form-horizontal" method="post" action="" role="form">
+            <form class="form-horizontal" action="" role="form" method="POST" enctype="multipart/form-data">
                 <img src="images/logo.png" class="img"><h3 style="font-weight: bold;  padding-bottom: 25;
     padding-left: 60;
 align-content: center; margin-left:150;">Sign up</h3>
@@ -323,6 +327,8 @@ align-content: center; margin-left:150;">Sign up</h3>
                         <span class="help-block"></span>
                     </div>
                 </div>
+                <input type="file" id="image" name="image" class="file" onchange="putImage()" accept="image/*">
+                <img style="max-width: 300px; max-height: 300px;" src="./images/products/no-image.png" id="target" id="preview"  class="img-thumbnail">
                 <button type="submit" name="submit" class="btn btn-primary btn-block">Submit</button>
                 <button type="reset" class="btn btn-primary btn-block">Reset</button>
                 
@@ -330,6 +336,19 @@ align-content: center; margin-left:150;">Sign up</h3>
 </div>
     
 <script>
+  function showImage(src, target) {
+    var fr = new FileReader();
+    fr.onload = function(){
+        target.src = fr.result;
+    }
+    fr.readAsDataURL(src.files[0]);
+}
+
+function putImage() {
+    var src = document.getElementById("image");
+    var target = document.getElementById("target");
+    showImage(src, target);
+}
 var myInput = document.getElementById("psw");
 var letter = document.getElementById("letter");
 var capital = document.getElementById("capital");
