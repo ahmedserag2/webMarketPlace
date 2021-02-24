@@ -298,6 +298,7 @@ $res->close();
         
         include 'footer.php'
     ?>
+
 </body>
 
 </html>

@@ -1,3 +1,7 @@
+ <?php 
+    session_start();
+        include 'menu.php'
+    ?>
 <!DOCTYPE html>
 <?php 
         session_start();
@@ -103,6 +107,7 @@
         display: inline-block;
         transition: background-color 0.6s ease;
         }
+
 
         /* Fading animation */
         .fade {
@@ -224,6 +229,7 @@ $conn = new mysqli($servername, $username, $password, $dbname);
 if ($conn->connect_error) {
   die("Connection failed: " . $conn->connect_error);
 }
+
 
 $sql = "SELECT * FROM `products` limit 10";
 $result = $conn->query($sql);

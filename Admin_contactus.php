@@ -1,6 +1,6 @@
 <html>
 <head>
-  <title> Auditor - Survey</title>
+  <title> Admin - Products</title>
   <link rel="icon" href="images/admin.jfif" type="image/x-icon"> 
   <link href="CSS/simple-sidebar.css" rel="stylesheet">
 <style>
@@ -22,12 +22,19 @@ th {
   background-color: #292b2c;
   color: white;
 }
+img
+{
+  margin-right:0 !important;
+  width:120px;
+  height:120px;
+  display:inline-block !important;
+}
 
 </style>
 </head>
 <?php
 session_start();
-if (!$_SESSION['loggedIn'] || $_SESSION['user']['Role'] != 4) {
+if (!$_SESSION['loggedIn'] || $_SESSION['user']['Role'] != 2) {
     echo "<script> location.href='home.php'; </script>";
 }
 
@@ -42,8 +49,10 @@ include "menu.php";
     <div class="bg-dark border-right" id="sidebar-wrapper">
 
       <div class="list-group list-group-flush bg-dark">
-        <a href="Auditor_surveys.php" class="list-group-item list-group-item-action bg-secondary text-light show"><span class="text-nowrap"><i class="fa fa-plus-square"></i> surveys</a></span>
-        <a href="messagesMenu.php" class="list-group-item list-group-item-action bg-dark text-light show"><span class="text-nowrap"><i class="fa fa-plus-square"></i>Messages</a></span>
+        <a href="Admin_products.php" class="list-group-item list-group-item-action bg-secondary text-light show"><span class="text-nowrap"><i class="fa fa-plus-square"></i> Products</a></span>
+        <a href="Admin_users.php" class="list-group-item list-group-item-action bg-dark text-light"><span class="text-nowrap"><i class="fa fa-user"></i> Users</a></span>
+        <a href="Admin_orders.php" class="list-group-item list-group-item-action bg-dark text-light"><span class="text-nowrap"><i class="fa fa-cog"></i> Orders</a></span>
+        <a href="Admin_contactus.php" class="list-group-item list-group-item-action bg-dark text-light"><span class="text-nowrap"><i class="fa fa-cog"></i> contact us</a></span>
         
       </div>
     </div>
@@ -108,22 +117,25 @@ if (isset($_GET['delete'])) {
   for ($i = 0; $i < count($valuesToDelete); $i++) {
     $v = $valuesToDelete[$i];
     //echo "<script>alert('".$v."');</script>";
-    $conn->query("DELETE FROM question WHERE survey_id=$v");
-    $conn->query("DELETE FROM survey WHERE survey_id=$v");
-    $conn->query("DELETE FROM survey_answer WHERE survey_id=$v");
-    //if (file_exists("images/products/".$v)) {
-    //  unlink("images/products/".$v);
-    
+    $conn->query("DELETE FROM reviews WHERE productId=$v");
+    $conn->query("DELETE FROM products WHERE Id=$v");
+    if (file_exists("images/products/".$v)) {
+      unlink("images/products/".$v);
+    }
   }
 }
 if (isset($_GET['search'])) {
   $val = $_GET['search'];
   $val2 = $_GET['searchBy'];
-  
-    $res = $conn->query("select * from survey where survey_name like '%$val%' OR survey_name like '%$val' OR survey_name like '$val%'");
-  
+  if ($val2 == "rating") {
+    $res = $conn->query("select * from contactus where Name like '%$val%' OR Name like '%$val' OR Name like '$val%'");
+  } else if ($val2 == "price") {
+    $res = $conn->query("select * from contactus where Name like '%$val%' OR Name like '%$val' OR Name like '$val%'");
+  } else {
+    $res = $conn->query("select * from contactus where Name like '%$val%' OR Name like '%$val' OR Name like '$val%'");
+  }
 } else {
-  $res = $conn->query("SELECT * FROM survey");
+  $res = $conn->query("SELECT * FROM contactus");
 
 }
 if (!$res) {
@@ -145,16 +157,13 @@ while ($row = $res->fetch_assoc()) {
     echo "<tr>";
     foreach (array_keys($row) as $colname) {
 
-      if ($colname == "reg_date") {
-        echo "<th>date added</th>";
-      } else if ($colname == "Id") {
-        echo "<th>&nbsp;&nbsp;#</th>";
+      if ($colname == "Id") {
+       // echo "<th>&nbsp;&nbsp;#</th>";
       } else {
         echo "<th>$colname</th>";
       }
     }
-    echo "<th>Action</th>";
-    echo "<th></th>";
+   // echo "<th>Action</th>";
     echo "</tr>\n";
   }
   $firstrow = 1;
@@ -166,16 +175,23 @@ while ($row = $res->fetch_assoc()) {
     if (($rownumber <= $page*10 && abs($page*10 - $rownumber < 10)))  {
       if ($where == 0) {
         $id = $colval;
-        echo "<td>&nbsp;<input type='checkbox' id='check".$id."' onclick='checkBoxes(".$id.")' name='select' value='".$id."'></td>";
-      } else {
+      //  echo "<td>&nbsp;<input type='checkbox' id='check".$id."' onclick='checkBoxes(".$id.")' name='select' value='".$id."'></td>";
+      }
+      else if($where == 5)
+      {
+        $path = "./". $colval;
+        //echo "<td>$path</td>";
+        //./Uploads/detectingChurn.png
+        printf( '<td><img  src="%s" alt="First slide" ></td>',$path);
+      }
+       else {
         echo "<td>$colval</td>";
       }
     }
     $where++;
   }
     if (($rownumber <= $page*10 && abs($page*10 - $rownumber < 10)))  {
-    echo "<td><a href='Auditor_users.php?Id=".$id."' class='btn btn-dark'>send survey</a></td>";
-    echo "<td><a href='Auditor_surveyresponses.php?Id=".$id."' class='btn btn-dark'>see responses</a></td>";
+    //echo "<td><a href='Admin_editproduct.php?Id=".$id."' class='btn btn-dark'>edit</a><td>";
   }
     $rownumber ++;
 
@@ -201,7 +217,7 @@ if (isset($_GET['search'])) {
     $change = false;
   }
   if ($change) {
-    echo '<a class="btn btn-dark" href="Auditor_surveys.php?search='.$s.'&page='.($page-1).'&searchBy='.$s2.'"><</a>'; 
+    echo '<a class="btn btn-dark" href="Admin_products.php?search='.$s.'&page='.($page-1).'&searchBy='.$s2.'"><</a>'; 
   }
 } else { 
   $do = $page - 1;
@@ -212,7 +228,7 @@ if (isset($_GET['search'])) {
     $change = false;
   }
   if ($change) {
-    echo '<a class="btn btn-dark" href="Auditor_surveys.php?page='.($page-1).'"><</a>'; 
+    echo '<a class="btn btn-dark" href="Admin_products.php?page='.($page-1).'"><</a>'; 
   }
 } 
 ?>
@@ -229,7 +245,7 @@ if (isset($_GET['search'])) {
     $change = false;
   }
   if ($change) {
-    echo '<a class="btn btn-dark" href="Auditor_surveys.php?search='.$s.'&page='.($page+1).'&searchBy='.$s2.'">></a>'; 
+    echo '<a class="btn btn-dark" href="Admin_products.php?search='.$s.'&page='.($page+1).'&searchBy='.$s2.'">></a>'; 
   }
 } else { 
   $do = $page + 1;
@@ -240,13 +256,14 @@ if (isset($_GET['search'])) {
     $change = false;
   }
   if ($change) {
-    echo '<a class="btn btn-dark" href="Auditor_surveys.php?page='.($page+1).'">></a>'; 
+    echo '<a class="btn btn-dark" href="Admin_products.php?page='.($page+1).'">></a>'; 
   }
 } 
 ?>
 
-<?php echo '<a id="delete" class="btn float-right bg-warning text-light" href="">delete</a>' ?>
-<?php echo '  <a class="btn bg-success text-light" href="Auditor_editsurvey.php?action=add">add survey</a>' ?>
+<?php
+ //echo '<a id="delete" class="btn float-right bg-warning text-light" href="">delete</a>' 
+ ?>
 
       </div>
     </div>
@@ -254,7 +271,7 @@ if (isset($_GET['search'])) {
   var selected = [];
   var link = document.getElementById("delete");
   var searchBy = "Name";
-  link.setAttribute("href", "Auditor_surveys.php");
+  link.setAttribute("href", "Admin_products.php");
   function checkBoxes(id) {
     var check = document.getElementById("check"+id);
     if (check.checked) {
@@ -267,9 +284,9 @@ if (isset($_GET['search'])) {
     }
     
     if (selected.length > 0) {
-      link.setAttribute("href", "Auditor_surveys.php?delete="+selected.join(",")+"");
+      link.setAttribute("href", "Admin_products.php?delete="+selected.join(",")+"");
     } else {
-      link.setAttribute("href", "Auditor_surveys.php");
+      link.setAttribute("href", "Admin_products.php");
     }
   }
   var searchBar = document.getElementById("searchBar");
@@ -292,7 +309,7 @@ if (isset($_GET['search'])) {
           return;
         }
       }
-      window.location = "Auditor_surveys.php?search="+searchBar.value+"&searchBy="+searchBy;
+      window.location = "Admin_products.php?search="+searchBar.value+"&searchBy="+searchBy;
     }
   }
   function show() {
@@ -309,11 +326,6 @@ if (isset($_GET['search'])) {
   }
 </script>
   </div>
-  <?php 
-        
-        include 'footer.php'
-    ?>
-
 </body>
 
 </html>

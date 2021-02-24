@@ -46,6 +46,9 @@ include "menu.php";
         <a href="Admin_products.php" class="list-group-item list-group-item-action bg-dark text-light show"><span class="text-nowrap"><i class="fa fa-plus-square"></i> Products</a></span>
         <a href="Admin_users.php" class="list-group-item list-group-item-action bg-dark text-light"><span class="text-nowrap"><i class="fa fa-user"></i> Users</a></span>
         <a href="Admin_orders.php" class="list-group-item list-group-item-action bg-secondary text-light"><span class="text-nowrap"><i class="fa fa-cog"></i> Orders</a></span>
+
+        <a href="Admin_contactus.php" class="list-group-item list-group-item-action bg-dark text-light"><span class="text-nowrap"><i class="fa fa-cog"></i> contact us</a></span>
+
         
       </div>
     </div>
@@ -369,6 +372,7 @@ if (isset($_GET['search'])) {
         
         include 'footer.php'
     ?>
+
 </body>
 
 </html>
