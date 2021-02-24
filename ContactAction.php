@@ -45,9 +45,10 @@ $lastname = $_POST['lname'];
 $email = $_POST['email'];
 $phonenumber = $_POST['phone'];
 $imageurl = $target_file;
+$message = $_POST['message'];
 
-$sql = "INSERT INTO ContactUs (FirstName, LastName, Email,Phone,ImageUrl)
-VALUES ('$firstname', '$lastname', '$email','$phonenumber','$imageurl')";
+$sql = "INSERT INTO ContactUs (FirstName, LastName, Email,Phone,ImageUrl,message)
+VALUES ('$firstname', '$lastname', '$email','$phonenumber','$imageurl','$message')";
 
 if ($conn->query($sql) === TRUE) {
     echo "<script>

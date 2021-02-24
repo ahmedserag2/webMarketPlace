@@ -1,3 +1,7 @@
+ <?php 
+    session_start();
+        include 'menu.php'
+    ?>
 <!DOCTYPE html>
 <html>
 
@@ -57,9 +61,6 @@
         transition: background-color 0.6s ease;
         }
 
-        .active {
-        background-color: #717171;
-        }
 
         /* Fading animation */
         .fade {
@@ -160,9 +161,7 @@
 </head>
 
 <body>
-    <?php 
-        include 'menu.php'
-    ?>
+
 
 <!--Start SlideShow -->
     <section>
