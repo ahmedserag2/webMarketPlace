@@ -296,6 +296,12 @@ if (isset($_GET['Id']) || isset($_POST['Id'])) {
     </div>
 
   </div>
+
+  <?php 
+        
+        include 'footer.php'
+    ?>
+
 </body>
 
 </html>

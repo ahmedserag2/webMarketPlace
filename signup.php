@@ -254,7 +254,9 @@ input[type=text]:placeholder {
     
     
 <div class="container">
+
             <form class="form-horizontal" action="" role="form" method="POST" enctype="multipart/form-data">
+
                 <img src="images/logo.png" class="img"><h3 style="font-weight: bold;  padding-bottom: 25;
     padding-left: 60;
 align-content: center; margin-left:150;">Sign up</h3>
@@ -408,6 +410,10 @@ myInput.onkeyup = function() {
 }
 </script>
 
+<?php 
+        
+        include 'footer.php'
+    ?>
         
     </body>
     </html>

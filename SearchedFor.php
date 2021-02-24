@@ -221,7 +221,10 @@ print'<nav aria-label="">';
 print'</nav>';
 ?>
 
-
+<?php 
+        
+        include 'footer.php'
+    ?>
 
 </body>
 </html>
