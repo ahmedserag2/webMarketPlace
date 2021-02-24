@@ -3,10 +3,7 @@
         include 'menu.php'
     ?>
 <!DOCTYPE html>
-<?php 
-        session_start();
-        include 'menu.php'
-    ?>
+
 <html>
 
 <head>
