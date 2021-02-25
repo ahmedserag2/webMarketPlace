@@ -38,6 +38,7 @@ if(isset($_SESSION['cartItems'])){
       $conn = new mysqli($servername, $username, $password, $dbname);
       // Check connection
       if ($conn->connect_error) {
+        error_log(mysqli_connect_error(),3,"../errors/db-errors.log");
         die("Connection failed: " . $conn->connect_error);
       }
 

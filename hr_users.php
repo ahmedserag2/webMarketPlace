@@ -77,6 +77,7 @@ $password = "";
 $DB = "mydb";
 $conn = mysqli_connect($servername, $username, $password, $DB);
 if (!$conn) {
+  error_log(mysqli_connect_error(),3,"../errors/db-errors.log");
   die("Connection failed: " .mysqli_connect_error());
 }
 
