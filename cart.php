@@ -13,6 +13,7 @@ if(isset($_SESSION['cartItems'])){
   foreach($_SESSION['cartItems'] as $cartItem){
   		try {
 		    array_push(  $Ids,(int)$cartItem['Id']);//echo $cartItem['Id'] . "  hehe " .$cartItem['quantity'];
+        //echo $cartItem['Id'] . "  hehe " .$cartItem['quantity'];
     		array_push($quantities,(int)$cartItem['quantity']);
 		} 
 		catch (Exception $e) 
@@ -142,7 +143,7 @@ if(isset($_SESSION['cartItems'])){
   			//alert(btnId);
   			 jQuery.ajax({
   			 	//
-              url:"./ajaxphp/DeleteFromCartSession.php",
+              url:"./ajaxphp/DeleteFromCartSession.php?action=deleteCartSession",
               data:'removeItem='+$("#"+Id).val(),
               type:"POST",
 
@@ -203,7 +204,7 @@ if(isset($_SESSION['cartItems'])){
             <br>
             <p class="card-text">Price : <?php echo $record['Price']?></p>
             <br>
-            <p class = "card -text">quantity: <?php echo $quantities[$qCounter]; ?></p>
+            <p class = "card -text">quantity: <?php echo $quantities[$qCounter]; $qCounter++;?></p>
             <form action = "" method = "POST">
             	<button class = "btn btn-danger" onclick='removeFromCart(this.id)' 
             		id = <?php echo 'removeItem'.$record['Id'];?>name = <?php echo 'removeItem'.$record['Id'];?> value = <?php echo $record['Id'] ?>><i class="fa fa-trash"></i></button>

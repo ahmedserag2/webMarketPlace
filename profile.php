@@ -111,20 +111,22 @@ if ($_SESSION["user"]["Role"] != 1) {
                                         	<?php
                                         		$prod = array();
 										  		$res = $conn->query("SELECT * FROM invoice WHERE customerId=".$_SESSION["user"]["Id"]."");
-                                                $l = 1;
-                                                if (isset($_GET['order'])) {
-                                                    $l = $_GET['order'];
-                                                }
+
                                                 // $rowData;
 
                                                 while ($row = $res->fetch_assoc()) {
                                                     //echo $l;
+                                                    $l = $row["Id"];
+                                                    if (isset($_GET['order'])) {
+                                                        $l = $_GET['order'];
+                                                    }
+                                                
                                                     if ($l == $row["Id"]) {
                                                         $rowData = $row;
                                                       //  echo $rowData;
                                                         echo "<option selected onclick='chng(".$row['Id'].")'>Order #".$row['Id']."</option>";
                                                     } else {
-                                                        $rowData = $row;
+                                                        //$rowData = $row;
                                                         echo "<option onclick='chng(".$row['Id'].")'>Order #".
                                                         $row['Id']."</option>";
                                                     }

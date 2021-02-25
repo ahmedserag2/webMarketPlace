@@ -1,7 +1,8 @@
 <?php 
 
-session_start();
+function deleteCartSession(){
 
+	session_start();
 
 if(isset($_POST['removeItem']))
 {
@@ -21,9 +22,21 @@ if(isset($_POST['removeItem']))
 		 {}
   
   
-}
+	}
 
 }
+}
+    //error_log($_GET['action']." empty action?\n",3,"../errors/ajax-errors.log");
+if(isset($_GET['action']) && function_exists($_GET['action'])) {
+    $action = $_POST['action'];
+    //$var = isset($_POST['name']) ? $_POST['name'] : null;
+    //$getData = $action($var);
+    // do whatever with the result
+    error_log("\ndetected get into function",3,"../errors/ajax-errors.log");
+    deleteCartSession();
+
+}
+
 
 
 ?>
