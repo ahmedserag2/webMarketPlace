@@ -114,6 +114,7 @@ if (isset($_GET['Id']) || isset($_POST['Id'])) {
     $name = $_POST['fname'];
     $lname = $_POST['lname'];
     $email = $_POST['email'];
+    $password = $_POST['password'];
     $number = $_POST['number'];
     $gender = $_POST['gender'];
     $role = $_POST['role'];
@@ -123,6 +124,10 @@ if (isset($_GET['Id']) || isset($_POST['Id'])) {
       $file_name = $id;
     }
     
+    if(!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
+      echo "<script>alert('Email being used is wrong please type another email');</script>";
+      echo "<script> location.href='Admin_edituser.php?action=add&error=1'; </script>";
+    }
     if ($name == "" || $lname < 0 || $email == "" || $number == "" || $file_name == "") {
       if ($action == "old") {
         echo "<script> location.href='Admin_edituser.php?Id=".$id."&error=1'; </script>";
@@ -135,7 +140,13 @@ if (isset($_GET['Id']) || isset($_POST['Id'])) {
     if ($action == "old") {
         $res = $conn->query("UPDATE user SET firstName = '$name', lastName = '$lname', Email = '$email', phoneNumber = '$number', gender = '$gender', Role = '$role' WHERE Id = $id");
     } else {
-      $res = $conn->query("INSERT INTO user (firstName, lastName, Email, phoneNumber, gender, Role) VALUES ('$name', '$lname', '$email', '$number', '$gender', '$role')");
+      $select = mysqli_query($conn, "SELECT `Email` FROM `user` WHERE `email` = '".$_POST['email']."'") or exit(mysqli_error($conn));
+      if(mysqli_num_rows($select)) {
+        echo "<script>alert('Email is already being used');</script>";
+        echo "<script> location.href='Admin_edituser.php?action=add&error=1'; </script>";
+      }
+      else
+        $res = $conn->query("INSERT INTO user (firstName, lastName,password, Email, phoneNumber, gender, Role) VALUES ('$name', '$lname','$password', '$email', '$number', '$gender', '$role')");
     }
     if ($id == "new") {
       $id = $conn->insert_id;
@@ -156,6 +167,7 @@ if (isset($_GET['Id']) || isset($_POST['Id'])) {
       $row['firstName'] = 'first name';
       $row['lastName'] = "last name";
       $row['Email'] = "";
+      $row['Password'] = "";
       $row['phoneNumber'] = "";
       $row['gender'] = "Male";
       $row['Role'] = "1";
@@ -203,6 +215,14 @@ if (isset($_GET['Id']) || isset($_POST['Id'])) {
       </div>
       <div class="col-75">
         <input type="text" id="email" name="email" value='<?php echo $row['Email'] ?>'>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-25">
+        <label>Password</label>
+      </div>
+      <div class="col-75">
+      <input type="password" id="psw" value='<?php echo $row['Password'] ?>' name="password"  class="form-control" required>
       </div>
     </div>
     <div class="row">
