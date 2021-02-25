@@ -166,7 +166,7 @@ input[type=text]:placeholder {
     
     .img
     {
-        height: 200px;
+        height: 250px;
         width: 75%;
         align-self: auto;
         padding: 50;

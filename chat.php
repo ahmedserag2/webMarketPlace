@@ -204,7 +204,7 @@ function loginForm(){
             //alert('function fired');
                 jQuery.ajax({
             //
-                url:"./ajaxphp/AjaxChatSend.php",
+                url:"./ajaxphp/AjaxChatSend.php?action=sendMessage",
                 data:'text='+$("#usermsg").val()+
                 '&receiver='+<?php echo $_GET['receiver'];?>+
                 '&sender='+sender,

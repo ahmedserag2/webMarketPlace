@@ -258,19 +258,19 @@ $conn->close();
             <div class="mySlides fade">
             <div class="numbertext">1 / 3</div>
             <img src="images/Slideshow/Slide1.jpg" style="width:100%">
-            <div class="text">De7k keep on</div>
+            <div class="text">What you need We have indeed</div>
         </div>
 
         <div class="mySlides fade">
             <div class="numbertext">2 / 3</div>
             <img src="images/Slideshow/Slide2.jpg" style="width:100%">
-            <div class="text">Emart is de7k</div>
+            <div class="text">Emart</div>
         </div>
 
         <div class="mySlides fade">
             <div class="numbertext">3 / 3</div>
             <img src="images/Slideshow/Slide3.jpg" style="width:100%">
-            <div class="text">de7k forever</div>
+            <div class="text">Emart</div>
         </div>
 
         </div>

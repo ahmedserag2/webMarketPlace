@@ -133,7 +133,7 @@ include "menu.php";
             	$sqlAdmins = "SELECT * FROM user WHERE Role = 2";
             	$result = $conn->query($sqlAdmins);
             	$admins = $result->fetch_all(MYSQLI_ASSOC);
-            	echo "<h3>you didnt send any message here are some of our available workers</h3> ";
+            	echo "<h5 style='margin-left: 20px;color: white;'>you didnt send any message here are some of our available workers</h5> ";
             	foreach($admins as $admin)
             	{
             		//echo $admin['firstName'];
