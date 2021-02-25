@@ -304,7 +304,7 @@
  ?>
 <div class = "row">
   <?php
-   $path = "./images/profile/".$record['Id'];
+   $path = "./images/users/".$record['Id'];
                 $files = glob($path, GLOB_BRACE);
                 $noImagePath = "./images/products/no-image.png";
                  $validatedPath = empty($files)? $noImagePath : $files[0];

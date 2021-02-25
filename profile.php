@@ -115,14 +115,20 @@ if ($_SESSION["user"]["Role"] != 1) {
                                                 if (isset($_GET['order'])) {
                                                     $l = $_GET['order'];
                                                 }
-                                                $rowData;
+                                                // $rowData;
+
                                                 while ($row = $res->fetch_assoc()) {
+                                                    //echo $l;
                                                     if ($l == $row["Id"]) {
                                                         $rowData = $row;
+                                                      //  echo $rowData;
                                                         echo "<option selected onclick='chng(".$row['Id'].")'>Order #".$row['Id']."</option>";
                                                     } else {
-                                                        echo "<option onclick='chng(".$row['Id'].")'>Order #".$row['Id']."</option>";
+                                                        $rowData = $row;
+                                                        echo "<option onclick='chng(".$row['Id'].")'>Order #".
+                                                        $row['Id']."</option>";
                                                     }
+
                                                 }
 										  		$productIDS = explode (",", $rowData['productIds']);
 										  		$prq = explode (",", $rowData['ProductQuantities']);
@@ -168,7 +174,22 @@ if ($_SESSION["user"]["Role"] != 1) {
 
                                     </div>
                                 </div>
-                                    <script type="text/javascript">
+                                   
+                                <ul class="social-link list-unstyled m-t-40 m-b-10">
+                                    <li><a href="#!" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="facebook" data-abc="true"><i class="mdi mdi-facebook feather icon-facebook facebook" aria-hidden="true"></i></a></li>
+                                    <li><a href="#!" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="twitter" data-abc="true"><i class="mdi mdi-twitter feather icon-twitter twitter" aria-hidden="true"></i></a></li>
+                                    <li><a href="#!" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="instagram" data-abc="true"><i class="mdi mdi-instagram feather icon-instagram instagram" aria-hidden="true"></i></a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+ <script type="text/javascript">
                                         function updateLabel() {
                                             var labelID = document.getElementById("labelID");
                                             var maxProducts = <?php echo $tProducts;?>;
@@ -211,19 +232,6 @@ if ($_SESSION["user"]["Role"] != 1) {
                                             window.location = "profile.php?order="+id;
                                         }
                                     </script>
-                                <ul class="social-link list-unstyled m-t-40 m-b-10">
-                                    <li><a href="#!" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="facebook" data-abc="true"><i class="mdi mdi-facebook feather icon-facebook facebook" aria-hidden="true"></i></a></li>
-                                    <li><a href="#!" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="twitter" data-abc="true"><i class="mdi mdi-twitter feather icon-twitter twitter" aria-hidden="true"></i></a></li>
-                                    <li><a href="#!" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="instagram" data-abc="true"><i class="mdi mdi-instagram feather icon-instagram instagram" aria-hidden="true"></i></a></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
   <?php 
         
         include 'footer.php'

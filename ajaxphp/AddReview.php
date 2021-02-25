@@ -23,6 +23,7 @@
 
           if(!$conn)
           {
+            error_log(mysqli_connect_error(),3,"../errors/db-errors.log");
             die("connect failed : " . mysqli_connect_error());
           }
             $rating = $_POST['rating']; 
@@ -47,6 +48,7 @@
             }
             else
             {
+              error_log($sqlreview." ". $conn->error,3,"../errors/query-errors.log");
               echo "Error: ".$sqlreview . "<br>". $conn->error;
               //echo $sqlUpdate;
 
