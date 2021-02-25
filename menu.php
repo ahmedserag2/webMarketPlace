@@ -47,10 +47,10 @@
               </li>';
 
                 echo '<li class="nav-item active">
-           <a class="nav-link" href="messagesMenu.php"><i class="fa fa-home"></i>messages <span class="sr-only">(current)</span></a>
+           <a class="nav-link" href="messagesMenu.php"><i class="fa fa-envelope	"></i>messages <span class="sr-only">(current)</span></a>
           </li>';
           echo '<li class="nav-item active">
-           <a class="nav-link" href="surveyMenu.php"><i class="fa fa-home"></i>surveys <span class="sr-only">(current)</span></a>
+           <a class="nav-link" href="surveyMenu.php"><i class="fa fa-envelope"></i>surveys <span class="sr-only">(current)</span></a>
           </li>';
           echo '
               <li class="nav-item active">
@@ -59,6 +59,8 @@
               echo '<li class="nav-item active">
         <a class="nav-link" href="contactus.php"><i class="fa fa-info-circle"></i> Contact us</a>
       </li>';
+      
+      
 
             } else if ($_SESSION["user"]["Role"] == 2){
                echo '<li class="nav-item active">
@@ -109,18 +111,7 @@
       <li class="nav-item active">
               <a class="nav-link" href="SearchedFor.php?ProductName="><i class="fa fa-shopping-basket"></i> All Products <span class="sr-only">(current)</span></a>
               </li>
-      <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          <i class="fa fa-shopping-basket"></i> Products
-        </a>
-
-        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <a class="dropdown-item" href="#">cat1</a>
-          <a class="dropdown-item" href="#">cat2</a>
-          <!--<div class="dropdown-divider"></div>
-          <a class="dropdown-item" href="#">Something else here</a>
-        </div>*/ !-->
-      </li>
+      
 
       
 
