@@ -186,9 +186,10 @@ if(isset($_SESSION['cartItems'])){
       
       <?php foreach($allRecords as $record){ 
         //change to new image file paths 
-        $noImage = "./pics/no-image.png";
-          $path = "./pics/".$record['Id'];
-        $files = glob($path."*.{jpg,jpeg,png,gif}", GLOB_BRACE);
+        $noImage = "./images/products/no-image.png";
+        //echo $record['Id'];
+          $path = "./images/products/".$record['Id'];
+        $files = glob($path, GLOB_BRACE);
 
        // echo implode(',', $files);
           $validatedPath = empty($files)? $noImage : $files[0];

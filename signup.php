@@ -215,7 +215,7 @@ input[type=text]:placeholder {
             //put the hased password before submitting
             $sqlInsert = "INSERT INTO 
             `user`(`firstName`, `lastName`, `password`, `Role`,`phoneNumber`,`gender`,`Email`,`date_of_birth`)
-             VALUES ('$firstname', '$lastname','$password',1,'$phonenumber','$gender','$email','$DOB')";
+             VALUES ('$firstname', '$lastname','$hashedPass',1,'$phonenumber','$gender','$email','$DOB')";
             $sqlmail = "SELECT Id FROM user WHERE Email = '$email'";
             $mailExists = mysqli_query($conn,$sqlmail);
 

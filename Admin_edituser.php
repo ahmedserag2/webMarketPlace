@@ -116,7 +116,9 @@ if (isset($_GET['Id']) || isset($_POST['Id'])) {
     $name = $_POST['fname'];
     $lname = $_POST['lname'];
     $email = $_POST['email'];
-    $password = $_POST['password'];
+    $userpassword = $_POST['password'];
+   
+    $hashedPass = sha1($userpassword);
     $number = $_POST['number'];
     $gender = $_POST['gender'];
     $role = $_POST['role'];
@@ -140,7 +142,7 @@ if (isset($_GET['Id']) || isset($_POST['Id'])) {
       return;
     }
     if ($action == "old") {
-        $res = $conn->query("UPDATE user SET firstName = '$name', lastName = '$lname', Email = '$email', phoneNumber = '$number', gender = '$gender', Role = '$role' WHERE Id = $id");
+        $res = $conn->query("UPDATE user SET firstName = '$name', lastName = '$lname', Email = '$email', phoneNumber = '$number', gender = '$gender', Role = '$role',password='$hashedPass' WHERE Id = $id");
     } else {
       $select = mysqli_query($conn, "SELECT `Email` FROM `user` WHERE `email` = '".$_POST['email']."'") or exit(mysqli_error($conn));
       if(mysqli_num_rows($select)) {
@@ -148,7 +150,7 @@ if (isset($_GET['Id']) || isset($_POST['Id'])) {
         echo "<script> location.href='Admin_edituser.php?action=add&error=1'; </script>";
       }
       else
-        $res = $conn->query("INSERT INTO user (firstName, lastName,password, Email, phoneNumber, gender, Role) VALUES ('$name', '$lname','$password', '$email', '$number', '$gender', '$role')");
+        $res = $conn->query("INSERT INTO user (firstName, lastName,password, Email, phoneNumber, gender, Role) VALUES ('$name', '$lname','$hashedPass', '$email', '$number', '$gender', '$role')");
     }
     if ($id == "new") {
       $id = $conn->insert_id;

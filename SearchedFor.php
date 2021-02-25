@@ -199,12 +199,12 @@ print'<nav aria-label="">';
     for($i = 0;$i < $noOfPages; $i++){
     	if($currentPage != $i){
    	    	printf('<li class="page-item"><a class="page-link" href="SearchedFor.php?no=%d & pn=%s">%d</a></li>'
-   	    		,$i, $query, $i);
+   	    		,$i, $query, $i+1);
    	    	
    		}
    		else{
    			print'<li class="page-item active">';
-      		printf('<a class="page-link" href="SearchedFor.php?no=%d & pn=%s">%d <span class="sr-only">(current)</span></a>', $i,$query , $i);
+      		printf('<a class="page-link" href="SearchedFor.php?no=%d & pn=%s">%d <span class="sr-only">(current)</span></a>', $i,$query , $i+1);
     		print'</li>';
    		}
 

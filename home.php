@@ -247,7 +247,8 @@ if ($result->num_rows > 0) {
     $count++;
   }
 } else {
-  echo "0 results";
+    error_log("0 results",3,"./errors/home-errors.log");
+  //echo "0 results";
 }
 $conn->close();
 ?>
