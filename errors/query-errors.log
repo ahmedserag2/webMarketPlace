@@ -1,0 +1,3 @@
+INSERT INTO `reviews`(`productId`, `customerId`, `Rating`, `Details`) 
+            VALUES ('1','44',5
+            ,'') Table 'mydb.pro' doesn't exist
