@@ -390,7 +390,7 @@ $conn->close();
             <div>
                 <?php 
                       printf('<a href="ProductPage.php?q=%s">',$RowsId[2]);
-                      printf('<img src="%s">',$path[2]);
+                      printf('<img src="%s">',$path[1]);
                       print'</a>';
                 ?>
                 
@@ -453,8 +453,10 @@ $conn->close();
             </div>
         <script src="https://code.jquery.com/jquery-2.2.0.min.js" type="text/javascript"></script>
         <script src="slick-master/slick/slick.js" type="text/javascript" charset="utf-8"></script>
-        
-        <script type="text/javascript">
+    </section>
+
+</body>
+<script type="text/javascript">
             $(document).on('ready', function() {
                 $(".regular").slick({
                     dots: true,
@@ -464,13 +466,9 @@ $conn->close();
                 });
             });
         </script>
-    </section>
 
-    <?php 
-        
-        include 'footer.php'
-    ?>
-</body>
-
+<?php 
+include 'footer.php'
+?>
 
 </html> 
