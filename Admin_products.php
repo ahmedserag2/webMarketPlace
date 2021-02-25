@@ -1,7 +1,7 @@
 <html>
 <head>
   <title> Admin - Products</title>
-  <link rel="icon" href="images/admin.jfif" type="image/x-icon"> 
+  <link rel="icon" href="images/admin.jpeg" type="image/x-icon"> 
   <link href="CSS/simple-sidebar.css" rel="stylesheet">
 <style>
 table {
@@ -157,7 +157,9 @@ while ($row = $res->fetch_assoc()) {
         echo "<th>date added</th>";
       } else if ($colname == "Id") {
         echo "<th>&nbsp;&nbsp;#</th>";
-      } else {
+      } else if ($colname == "Details") {
+        echo "<th style=' max-width: 200px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;'>$colname</th>";
+      }else {
         echo "<th>$colname</th>";
       }
     }
@@ -174,7 +176,9 @@ while ($row = $res->fetch_assoc()) {
       if ($where == 0) {
         $id = $colval;
         echo "<td>&nbsp;<input type='checkbox' id='check".$id."' onclick='checkBoxes(".$id.")' name='select' value='".$id."'></td>";
-      } else {
+      } else if ($where ==2) {
+        echo "<td style='max-width: 200px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;'>$colval</td>";
+      }else {
         echo "<td>$colval</td>";
       }
     }

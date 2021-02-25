@@ -40,10 +40,7 @@ function loginForm(){
     <head>
         <meta charset="utf-8" />
 		<style>
-		* {
-    margin: 0;
-    padding: 0;
-  }
+
    
   body {
     
@@ -52,7 +49,6 @@ function loginForm(){
   }
    
   form {
-    padding: 15px 25px;
     display: flex;
     gap: 10px;
     justify-content: center;
@@ -89,6 +85,8 @@ function loginForm(){
   #wrapper,
   #loginform {
     margin: 0 auto;
+    margin-top: 35px;
+    margin-bottom: 35px;
     padding-bottom: 25px;
     background: #eee;
     width: 600px;
@@ -381,7 +379,7 @@ function loginForm(){
 
               if($record['comment'] == 1)
               {
-                echo "<div class='msgln'><span class='chat-time'>".$record['reg_date']."</span> <b class='user-name'>super visor</b> ".stripslashes(htmlspecialchars($record['content']))."<br></div>";
+                echo "<div class='msgln'><span class='chat-time'>".$record['reg_date']."</span> <b class='user-name'>supervisor</b> ".stripslashes(htmlspecialchars($record['content']))."<br></div>";
               }
               else
               {

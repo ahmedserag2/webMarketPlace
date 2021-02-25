@@ -27,6 +27,11 @@ include "menu.php";
 
 
 
+if(count($allRecords) == 0)
+            {
+              echo "<h1> no surveys to show yet</h1>";
+              die;
+            }
 
 
 
