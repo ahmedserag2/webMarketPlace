@@ -43,7 +43,7 @@
            // echo '<a class="navbar-brand" href="home.php">Welcome '.$_SESSION["user"]["firstName"].'</a>';
             if ($_SESSION["user"]["Role"] == 1) {
               echo '<li class="nav-item active">
-              <a class="nav-link" href="#profile.php"><i class="fa fa-user"></i> My Profile <span class="sr-only">(current)</span></a>
+              <a class="nav-link" href="profile.php"><i class="fa fa-user"></i> My Profile <span class="sr-only">(current)</span></a>
               </li>';
 
                 echo '<li class="nav-item active">
@@ -56,6 +56,9 @@
               <li class="nav-item active">
               <a class="nav-link" href="cart.php"><i class="fa fa-shopping-cart"></i>Cart<span class="sr-only">(current)</span></a>
               </li>';
+              echo '<li class="nav-item active">
+        <a class="nav-link" href="contactus.php"><i class="fa fa-info-circle"></i> Contact us</a>
+      </li>';
 
             } else if ($_SESSION["user"]["Role"] == 2){
                echo '<li class="nav-item active">
@@ -96,6 +99,9 @@
              echo ' <li class="nav-item active">
                 <a class="nav-link" href="signup.php"><i class="fa fa-user-plus"></i> Signup <span class="sr-only">(current)</span></a>
               </li>';
+               echo '<li class="nav-item active">
+        <a class="nav-link" href="contactus.php"><i class="fa fa-info-circle"></i> Contact us</a>
+      </li>';
           }
       ?>
 
@@ -121,9 +127,7 @@
     
     
       
-      <li class="nav-item active">
-        <a class="nav-link" href="contactus.php"><i class="fa fa-info-circle"></i> Contact us</a>
-      </li>
+      
 
         
     </ul>
